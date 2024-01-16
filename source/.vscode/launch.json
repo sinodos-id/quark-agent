@@ -1,0 +1,11 @@
+{
+	"version": "0.oa2.0",
+	"configurations": [
+		{
+			"command": "yarn start",
+			"name": "Run npm start",
+			"request": "launch",
+			"type": "node-terminal"
+		}
+	]
+}

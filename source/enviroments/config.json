@@ -4,6 +4,7 @@
   "DID_METHOD":"did:quarkid:zksync",
   "WEBSOCKET_ENDPOINT_URL":"https://quarkid-message-manager-dev.gcba.gob.ar",
   "SSI_INTEGRATION_API_URL": "https://quarkid-ssi-dev.gcba.gob.ar",
+  "SSI_INTEGRATION_TOKEN": "TslFxReR9aceX6TtJM40OYIExAWIvzz8",
   "MONGO_URI":"mongodb://10.9.11.141:27017/message-manager?authSource=admin",
   "MODENA_URL":"https://is-proxy-dev.gcba.gob.ar",
   "VAULT_URL":"http://vault-vault-qa.apps.ocp4-dev.gcba.gob.ar/v1" ,

@@ -22,7 +22,7 @@
     "clean": "find . \\( -name 'node_modules' -o -name 'dist' -o -name 'lib' \\) -type d -prune -exec rm -rf '{}' +"
   },
   "dependencies": {
-    "@extrimian/agent": "0.9.0-2",
+    "@extrimian/agent": "0.8.7",
     "@extrimian/did-resolver": "1.4.4",
     "@extrimian/kms-storage-vault": "1.6.1",
     "@extrimian/one-click-agent-plugin": "^0.1.9",

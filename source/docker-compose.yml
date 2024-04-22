@@ -1,14 +1,5 @@
 version: "3"
 services:
-  vault:
-    container_name: vault
-    image: vault
-    restart: always
-    ports:
-      - "8200:8200"
-    environment:
-      VAULT_DEV_ROOT_TOKEN_ID: root
-
   backend-agent:
     container_name: backend-agent
     build:
@@ -16,15 +7,5 @@ services:
     restart: always
     ports:
       - "3500:3500"
-    env_file:
-      - .env
-
-  backend-agent-2:
-    container_name: backend-agent-2
-    build:
-      context: .
-    restart: always
-    ports:
-      - "3600:3500"
     env_file:
       - .env

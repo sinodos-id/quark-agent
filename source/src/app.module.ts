@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { HealthController } from './controllers/health.controller';
-import { SsiIntegrationService } from './services/ssi-integration.service';
-import { WaciProtocolProvider } from './services/waci-protocol.provider';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
 import { MessagingGateway } from './controllers/messaging.gateway';
@@ -30,8 +28,6 @@ import { AuthModule } from './auth/auth.module';
     ConfigProvider,
     VaultStorage,
     AgentProvider,
-    WaciProtocolProvider,
-    SsiIntegrationService,
     MessagingGateway,
   ],
 })

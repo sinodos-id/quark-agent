@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@extrimian/agent": "0.9.0-25",
-    "@extrimian/did-resolver": "1.4.4",
+    "@quarkid/did-resolver": "1.0.0",
     "@extrimian/kms-storage-vault": "1.6.1",
     "@extrimian/waci": "1.0.9",
     "@nestjs/cli": "^9.0.0",

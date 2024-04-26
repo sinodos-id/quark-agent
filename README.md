@@ -20,8 +20,7 @@ Ademas esta pensado para interactuar con un micro servicio encargado de traducir
 
 1. Generación de invitaciones QR
 2. Generación de invitaciones DeepLink
-3. Almacenamiento de DIDs en la base de datos del cliente
-
+   
 ## Tecnologías
 
 La aplicación cuenta con las siguientes técnologias:

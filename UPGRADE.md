@@ -1,18 +1,16 @@
 
-# Upgrade de v2.0.3-RC2 => v2.0.4-RC2
+# Upgrade de v2.0.4-RC2 => v2.0.5-RC2
 
-## DB Upgrade
+## Upgrade
 
 ## Realizar build y deploy desde tags
 
-- message-manager/tags: 2.0.4-RC2
+- message-manager/tags: 2.0.5-RC2
 
 ### Despliegue (OC)
 
 Acciones
-- agregar volumen persistente en el deployment en el mountpath : /opt/app-root/src/storage
-- En el archivo deployment.yaml modificar el volumeMounts con lo siguiente mountPath: /opt/app-root/src/enviroments/config.json subPath: config.json
-- cambiar variable de entorno de qa : 
+- Agregar variable de entorno : "SSI_INTEGRATION_TOKEN": "TslFxReR9aceX6TtJM40OYIExAWIvzz8"
 
 
 

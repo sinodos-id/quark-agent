@@ -10,7 +10,7 @@ export class FileSystemStorage implements IAgentStorage {
 
   async update<T>(key: string, value: T): Promise<void> {
     const map = this.getData();
-    map.set(key, value as T);
+    map.set(key, value);
     this.saveData(map);
   }
 

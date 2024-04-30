@@ -45,7 +45,6 @@ export class AppController {
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
     const invitationDecoded = JSON.parse(decode(invitationSplit));
-    // invitationDecoded['body'].ws = this.config.WEBSOCKET_ENDPOINT_URL;
     return invitationDecoded;
   }
 

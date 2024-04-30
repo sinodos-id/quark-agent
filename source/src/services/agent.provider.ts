@@ -8,7 +8,6 @@ import {
 } from '@extrimian/agent';
 import { FactoryProvider } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
-import { FileSystemAgentSecureStorage } from '../storage/filesystem-secure-storage';
 import { FileSystemStorage } from '../storage/filesystem-storage';
 import { VaultStorage } from 'src/storage/vault-storage';
 

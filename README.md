@@ -1,46 +1,32 @@
-## [Descripción](https://github.com/gcba/message-manager#descripci%C3%B3n)
-## [Tecnologías](https://github.com/gcba/message-manager#tecnolog%C3%ADas)
-## [Arquitectura](https://docs.quarkid.org/Arquitectura/) y [Documentación](https://docs.quarkid.org/Arquitectura/componentes/)
-## Configuraciones:
-### 1. [Configuraración de entorno local](https://github.com/gcba/message-manager#configuraci%C3%B3n-de-entorno-local)
-### 2. [Variables de Entorno](https://github.com/gcba/message-manager#variables-de-entorno)
-## [Licencia](https://github.com/gcba/message-manager#licencia)
+# Description
 
+This is a component that acts as a message orchestrator, managing the workflow within the SSI environment. 
+It is designed to work within the same network environment without additional security measures.
+It is also designed to interact with a microservice responsible for translating front-end requests to this Backend Agent and vice versa. We call this layer SSI-Integration, which in its presentation layer exposes a REST API with the main functions:
 
-
-
------------------------------------------------------------------------------
-
-
-# Descripción
-
-Es un componente que actúa como orquestador de mensajes en el cual se gestiona el flujo de trabajo dentro del entorno de SSI. 
-Está diseñado para trabajar dentro de un mismo entorno de red sin medidas de seguridad adicionales.
-Ademas esta pensado para interactuar con un micro servicio encargado de traducir las peticiones del front con este Backend Agent y también de forma inversa. Esta capa la llamamos SSI-Integration la cual en su capa de presentación expone una API REST con las principales funciones: 
-
-1. Generación de invitaciones QR
-2. Generación de invitaciones DeepLink
+1. Generation of QR invitations
+2. Generation of DeepLink invitations
    
-## Tecnologías
+## Technologies
 
-La aplicación cuenta con las siguientes técnologias:
+The application uses the following technologies:
 
-* Javascript
+* JavaScript
 * Node.js
 * Nest.js
   
-## Arquitectura
-[Diagrama](https://docs.quarkid.org/Arquitectura/)
+## Architecture
+[Diagram](https://docs.quarkid.org/en/Arquitectura/)
 
-## Documentación
-[Link](https://docs.quarkid.org/Arquitectura/componentes/)
+## Documentation
+[Link](https://docs.quarkid.org/en/Arquitectura/componentes/)
 
-## Configuración de entorno local
+## Local Environment Setup
 
-Clonar el repositorio
+Clone the repository
 
-- Abrir el proyecto con el editor seleccionado
-- Abrir una terminal y ejecutar:
+- Open the project with your selected editor
+- Open a terminal and execute:
 
 ```bash
 - cd source
@@ -49,23 +35,23 @@ Clonar el repositorio
 - yarn start
 ```
 
-Al instalar las dependecias con el comando "yarn" puede darnos error la libreria "@mattrglobal/node-bbs-signatures", opcional ignorar el mismo.
+When installing dependencies with the "yarn" command, we may get an error with the "@mattrglobal/node-bbs-signatures" library, it's optional to ignore it.
 
-## Pasos para instalar el componente en un servidor
+## Steps to install the component on a server
 
-1. Contar con Linux vacío. 
-2. Instalar el componente y sus imágenes, se encuentran [Docker](https://hub.docker.com/r/quarkid/message-manager)
+1. Have an empty Linux server. 
+2. Install the component and its images, which can be found on [Docker](https://hub.docker.com/r/quarkid/message-manager)
 
-Para instalar un componente desde Docker Hub en tu servidor, sigue estos pasos:
+To install a component from Docker Hub on your server, follow these steps:
 
-1. Conéctate al servidor.
+1. Connect to the server.
 
-2. Instala Docker en el servidor:
-Si aún no tienes Docker instalado en tu servidor, sigue las instrucciones para instalar Docker en tu sistema operativo. Puedes encontrar guías detalladas en la documentación oficial de Docker.
+2. Install Docker on the server:
+If you don't have Docker installed on your server yet, follow the instructions to install Docker for your operating system. You can find detailed guides in the official Docker documentation.
 
-3. Descarga Docker.
+3. Download Docker.
 
-4. [Generar vault](https://developer.hashicorp.com/vault/tutorials/auth-methods/approle#step-1-enable-approle-auth-method)
+4. [Generate vault](https://developer.hashicorp.com/vault/tutorials/auth-methods/approle#step-1-enable-approle-auth-method)
 
 Policy:
 ```
@@ -73,17 +59,17 @@ path "secret/*" {
   capabilities = [ "create", "read", "update", "list", "delete" ]
 }
 ```
-5. Ejecutar:
+5. Execute:
 ```
 cd source
 ```
-6. Ejecutar:
+6. Execute:
 ```
 docker compose up
 ```
 
-## Variables de Entorno
-## Generales
+## Environment Variables
+## General
 
 N/A 
 
@@ -91,23 +77,10 @@ N/A
 
 N/A
 
-## Requerimientos de red
+## Network Requirements
 
-La aplicación debe tener conectividad a internet y al componente DWN Client.
+The application must have internet connectivity and connection to the DWN Client component.
 
-## Ruta de acceso
+## Access Route
 
 N/A
-
-## Licencia
-Derechos de autor © 2023 Gobierno de la Ciudad de Buenos Aires
-
-Licenciado bajo la Licencia Apache, Versión 2.0 (la "Licencia");
-usted no puede utilizar este archivo excepto en cumplimiento con la Licencia.
-Puede obtener una copia de la Licencia en
-http://www.apache.org/licenses/LICENSE-2.0.
-A menos que lo requiera la ley aplicable o se acuerde por escrito, el software
-distribuido bajo la Licencia se distribuye "TAL CUAL",
-SIN GARANTÍAS O CONDICIONES DE NINGÚN TIPO, ya sean expresas o implícitas.
-Consulte la Licencia para el idioma específico que rige los permisos y
-limitaciones bajo la Licencia.

@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug NestJS",
+        "runtimeExecutable": "pnpm",
+        "runtimeArgs": ["run", "start"],
+        "console": "integratedTerminal",
+        "restart": true,
+        "skipFiles": ["<node_internals>/**"],
+        "cwd": "${workspaceFolder}/source",
+        "preLaunchTask": "Use Node 21",
+      }
+    ]
+  }

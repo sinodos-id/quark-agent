@@ -7,19 +7,18 @@ import {
   Get,
   Inject,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { decode } from 'base-64';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import { ApiTokenAuthGuard } from 'src/auth/guard/apitoken-auth.guard';
+// import { ApiTokenAuthGuard } from 'src/auth/guard/apitoken-auth.guard';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
   SIGNUP = 'extrimian/did-authentication/signup',
 }
 
-@UseGuards(ApiTokenAuthGuard)
+// @UseGuards(ApiTokenAuthGuard)
 @Controller()
 export class AppController {
   constructor(

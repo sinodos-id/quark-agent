@@ -10,7 +10,7 @@ import {
   WACICredentialOfferSucceded,
 } from '@extrimian/agent';
 import { FileSystemStorage } from './storage/filesystem-storage';
-import { VaultStorage } from './storage/vault-storage';
+import { MemoryStorage } from './storage/memory-storage';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 
@@ -124,7 +124,10 @@ import { AuthModule } from './auth/auth.module';
       inject: [CONFIG],
     },
     ConfigProvider,
-    VaultStorage,
+    {
+      provide: 'AGENT_SECURE_STORAGE',
+      useClass: MemoryStorage,
+    },
     AgentProvider,
     MessagingGateway,
   ],

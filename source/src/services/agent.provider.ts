@@ -1,21 +1,26 @@
-import {
-  Agent,
-  AgentModenaUniversalRegistry,
-  AgentModenaUniversalResolver,
-  DWNTransport,
-  WACIProtocol,
-  WebsocketServerTransport,
-} from '@extrimian/agent';
 import { FactoryProvider } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
 import { FileSystemStorage } from '../storage/filesystem-storage';
-import { VaultStorage } from 'src/storage/vault-storage';
+import {
+  Agent,
+  AgentSecureStorage,
+  AgentModenaUniversalRegistry,
+  AgentModenaUniversalResolver,
+  WACIProtocol,
+  WebsocketServerTransport,
+  WebsocketClientTransport,
+} from '@extrimian/agent';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
-  inject: [VaultStorage, WACIProtocol, WebsocketServerTransport, CONFIG],
+  inject: [
+    'AGENT_SECURE_STORAGE',
+    WACIProtocol,
+    WebsocketServerTransport,
+    CONFIG,
+  ],
   useFactory: async (
-    vaultStorage: VaultStorage,
+    secureStorage: AgentSecureStorage,
     waciProtocol: WACIProtocol,
     transport: WebsocketServerTransport,
     config: Configuration,
@@ -24,11 +29,16 @@ export const AgentProvider: FactoryProvider<Agent> = {
       didDocumentRegistry: new AgentModenaUniversalRegistry(config.MODENA_URL),
       didDocumentResolver: new AgentModenaUniversalResolver(config.MODENA_URL),
       vcProtocols: [waciProtocol],
-      supportedTransports: [new DWNTransport()],
-      agentStorage: new FileSystemStorage({ filepath: './storage/agent-storage.json' }),
-      vcStorage: new FileSystemStorage({ filepath: './vc-storage.json' }),
-      secureStorage: vaultStorage,
+      supportedTransports: [new WebsocketClientTransport()],
+      agentStorage: new FileSystemStorage({
+        filepath: './storage/agent-storage.json',
+      }),
+      vcStorage: new FileSystemStorage({
+        filepath: './vc-storage.json',
+      }),
+      secureStorage,
     });
+
     await agent.initialize();
     const dids = agent.identity.getDIDs();
     if (!dids.length) {

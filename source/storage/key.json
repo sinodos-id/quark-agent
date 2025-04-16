@@ -1,0 +1,49 @@
+{
+  "0xfb08ace4ad825a8be0af09209e5308c21e7a922daaf2e391c132b65bca4fda04973850931f2d56449c205a6030b878111c2a09199b46465ccfabae88e23a6a82": {
+    "suite": "es256k",
+    "privateKey": "0x6b65591a4ff0f99bc7347fd4b15fa5efffbc833b356011358eefa93ef9a09329",
+    "publicKey": "0x04fb08ace4ad825a8be0af09209e5308c21e7a922daaf2e391c132b65bca4fda04973850931f2d56449c205a6030b878111c2a09199b46465ccfabae88e23a6a82",
+    "curve": "secp256k1",
+    "mnemonic": "recall urban access this lab wrap vital seat organ lift valve chair"
+  },
+  "0xb4596aee6ede8c060f640a9465df269b5e5f019b6a25c23c0ea421f87e9db68a6e422b2908d75ceb23c7a2fd537d5fac3801c032226948ac099fa76ddf4d9f78": {
+    "suite": "es256k",
+    "privateKey": "0x33f5c80f67c604bbcaa2952b62cb16e58eefd83a10e5e6a47f8a036b866167ed",
+    "publicKey": "0x04b4596aee6ede8c060f640a9465df269b5e5f019b6a25c23c0ea421f87e9db68a6e422b2908d75ceb23c7a2fd537d5fac3801c032226948ac099fa76ddf4d9f78",
+    "curve": "secp256k1",
+    "mnemonic": "large source crystal blouse ecology skull begin bicycle air order eternal find"
+  },
+  "0x17947f55472b23e0c43fa11baa46bebcdee23ca3d7e9cf649fe481b1cae2bc4c": {
+    "suite": "didcommv2",
+    "privateKey": "0x453581653222afb599fe712747e434c03d5cf4519d1dbbed7334384a2b28870417947f55472b23e0c43fa11baa46bebcdee23ca3d7e9cf649fe481b1cae2bc4c",
+    "publicKey": "0x17947f55472b23e0c43fa11baa46bebcdee23ca3d7e9cf649fe481b1cae2bc4c",
+    "keyType": "Ed25519"
+  },
+  "0x89d51f2c1cf73e966de188c3e1b132781d4de94f923da0e95f9847fe7dfba62e72811593a85f55ea8d326b16b1bf62100ae516e88249126ebcc47f243ec1682275862e536c7d92e18546670b0c794e4adb657cd0252578081336863ac874ff83": {
+    "suite": "bbsbls2020",
+    "privateKey": "2zA4kqX7FFwgA57dQTLxozxaS5XvcsoBVvDN4THHNsVZ",
+    "publicKey": "pUqAUQ61MbdE8Jt3DpmCa5Gr4yC3zwALw1RNHbu3N7TEX5ZG4fC7GVseHNRdVYsFC21XV9xDdk96afgV71iHqGiMiJZsk6W7uAT2rCgjCQyTA4kLmAPCiM4Hbo5Bmrax6ee",
+    "keyType": "Bls12381G2Key2020"
+  },
+  "0x8dfead8cc58f9c4e79b154b94b68e2a23af84f188d00967a1be79105f6e4fda291b0ca0801193dceb32521c59c108a3541f1b0c91504dd6d803823e4c236926aab85f04eadeb90d0c305684b52c6b5d7b604f29efc4c694b84878efad2a853a7f4e9e934ff5182066f8cb3ecb6d454439c701e8907ad68eb8305c2455a7d644b46f16a637722d121bc03a50e5fc2eb4ec43eeb1697a9b037ec1af075ade73182ee1e40011234eed882465772da44586a8c732b71e965351787ef11b2298d1024a5195ab3313c4f2be000a56984cae93daf00488a48efa998bbf25d7d01aa95b53fcc38253b614b24adbb07f444734156d00b95b507e836c7233c164bbef3e5a3": {
+    "suite": "rsaSignature2018",
+    "publicKeyJWK": {
+      "kty": "RSA",
+      "n": "jf6tjMWPnE55sVS5S2jiojr4TxiNAJZ6G-eRBfbk_aKRsMoIARk9zrMlIcWcEIo1QfGwyRUE3W2AOCPkwjaSaquF8E6t65DQwwVoS1LGtde2BPKe_ExpS4SHjvrSqFOn9OnpNP9RggZvjLPsttRUQ5xwHokHrWjrgwXCRVp9ZEtG8WpjdyLRIbwDpQ5fwutOxD7rFpepsDfsGvB1recxgu4eQAESNO7YgkZXctpEWGqMcytx6WU1F4fvEbIpjRAkpRlaszE8TyvgAKVphMrpPa8ASIpI76mYu_JdfQGqlbU_zDglO2FLJK27B_REc0FW0AuVtQfoNscjPBZLvvPlow",
+      "e": "AQAB"
+    },
+    "privateKeyJWK": {
+      "kty": "RSA",
+      "n": "jf6tjMWPnE55sVS5S2jiojr4TxiNAJZ6G-eRBfbk_aKRsMoIARk9zrMlIcWcEIo1QfGwyRUE3W2AOCPkwjaSaquF8E6t65DQwwVoS1LGtde2BPKe_ExpS4SHjvrSqFOn9OnpNP9RggZvjLPsttRUQ5xwHokHrWjrgwXCRVp9ZEtG8WpjdyLRIbwDpQ5fwutOxD7rFpepsDfsGvB1recxgu4eQAESNO7YgkZXctpEWGqMcytx6WU1F4fvEbIpjRAkpRlaszE8TyvgAKVphMrpPa8ASIpI76mYu_JdfQGqlbU_zDglO2FLJK27B_REc0FW0AuVtQfoNscjPBZLvvPlow",
+      "e": "AQAB",
+      "d": "RUpEjT-w0zEWQDscSpitk0Xceth7ohBMGQbYpYTz_HMSzibgXgzftNiFo6PHAuk2kO3se0t2-sie-4ZEcKNpsoTt0LTMOPoLbUdbu_nyPrU7PNHaVDrDXRcYgWSTXJGqEaD9bJ-0uhMC5zG7rwIQ9odFzRjINs5OsrqiMO615rT9BXU37780ExGEbvEvPlvNQOvfsEMHcBIQ9m6XrNibAhYfUCcmIvvMozLbdH7gdundGB95P6a-OqHJK9v9TnhT5Mr1rf8Tf0W9WRa6v0KfUUyOlxantvKI5SuXW1bxiemQew7H3zZRagFIww1Qd-aoKH4zDLK5znR2HjT11RoM2Q",
+      "p": "xQ4jHjbsW46_CmOeLjYMA-k3i5923xAesNVlVO4970xv8OeDGnnk3tzI_2HuAvyygi60OlVtEMeutAY5FRDJrqWes-bEvc9hPJFoSxAEt85RErDRT9dzc_4myxGZz3VBoZaxlojV6vdhzvMjlPdeJtikRzKoXz197lZkbQrBRnk",
+      "q": "uHgw9ClkyfepKZ4OyOLbNHvyIpVJ6jtaZymT9uZQgXdDZ_eZ8DyrpAa6mqbgJvnTGsL4YX6atsAJa-zpvkwYyD02wibL_QaHG7mmxtOrR7ODcJlt_CK3RX7mpvj-WkcDqaKT9k8CoJoDY0qQNcSeZ6zX3vVG6XmiT_XcKtqS9fs",
+      "dp": "K-MOJziMQ4fzPFkbbadT3bsfR9VoIB3y9-dO_i9hU95uP_UP2eGz-36otVgWLkwhZaUJNsS32bjfS_Dm3a4zfNYeFmsa_jslqNupoq4anuUwYT1IIMQXTooYEboFy5KN33M0chZfrkkSW4kDL7Y4Hea6D7FUloGXfnF3RGHU0eE",
+      "dq": "HA6r43coTU_N-vZ_aS6YCLORcJEkXOwKJAa-6p69P_PT3MxcLZ4MvTYIy9z12vfElB1zieCnx4QN6sxuAPOyEUK-QWmFPUbw5dam9zbapl03cLjlcaQWHAvhKSRWC4UhmXuQ5bW-wI6sVT3SEVuGfF5dtxu3XWuStHbAtgPotmE",
+      "qi": "jg635SujspqWf-9jFN1CTZ75Ea4EazmC4VrBLVk9fHdwVkQsQ-xlkci8GTtsOA4i69sqxtcvVER1ehwUi7ktmgLfoCT_38oWcWF5Dbgovgzjiw-EYfiJ_6YRd_s_QFvfqGirl84iXftsyYX97qvWDRDtiKY08XcPkzInIuJ33uo"
+    },
+    "privateKey": null,
+    "publicKey": null
+  }
+}

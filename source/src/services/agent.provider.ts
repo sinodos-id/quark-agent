@@ -61,6 +61,10 @@ export const AgentProvider: FactoryProvider<Agent> = {
       console.log('ack completed', param);
     });
 
+    agent.vc.presentationVerified.on((param) => {
+      console.log('ack completed', param);
+    });
+
     agent.vc.credentialArrived.on(async (vcs) => {
       await Promise.all(
         vcs.credentials.map((vc) => {
@@ -71,6 +75,33 @@ export const AgentProvider: FactoryProvider<Agent> = {
         }),
       );
     });
+
+    agent.vc.credentialPresented.on((data) => {
+      console.log('Credential presented:', {
+        vcVerified: data.vcVerified,
+        presentationVerified: data.presentationVerified,
+        vcId: data.vc.id,
+      });
+    });
+
+    agent.vc.problemReport.on((data) => {
+      console.error('Problem report received:', {
+        did: data.did.value,
+        code: data.code,
+        invitationId: data.invitationId,
+        messageId: data.messageId,
+      });
+    });
+
+    // Log when credentials arrive
+    agent.vc.credentialArrived.on((data) => {
+      console.log('Credentials arrived:', {
+        count: data.credentials.length,
+        issuer: data.issuer.name,
+        messageId: data.messageId,
+      });
+    });
+
     return agent;
   },
 };

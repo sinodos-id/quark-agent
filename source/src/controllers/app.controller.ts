@@ -42,7 +42,7 @@ export class AppController {
     }
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
-    // const invitationDecoded = JSON.parse(decode(invitationSplit));
+
     let invitationDecoded = {};
 
     try {

@@ -3,37 +3,33 @@ const API_URL = 'http://localhost:8000';
 
 async function testInvitation() {
   try {
-    // Test Issuance Flow
     console.log('\n=== Testing Issuance Flow ===');
     const issuanceResponse = await axios.post(`${API_URL}/message`, {
-      goalCode: 'streamlined-vc',
+      goalCode: 'streamlined-vp',
     });
-    
+
     // Get the original invitation data
     const invitationData = issuanceResponse.data;
-    
+
     // Convert the invitation data to a string and then base64 encode it
     const invitationString = JSON.stringify(invitationData);
-    const base64Invitation = Buffer.from(invitationString).toString('base64')
+    const base64Invitation = Buffer.from(invitationString)
+      .toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, ''); // URL-safe base64 encoding
-    
+
     // Format the response in the expected format
     const formattedResponse = {
       invitationId: invitationData.id,
-      oobContentData: `didcomm://?_oob=${base64Invitation}`
+      oobContentData: `didcomm://?_oob=${base64Invitation}`,
     };
-    
-    console.log('Issuance Response:', JSON.stringify(formattedResponse, null, 2));
-    
-    // Test Presentation Flow
-    console.log('\n=== Testing Get Credentials Flow ===');
-    const presentationResponse = await axios.get(`${API_URL}/issued-vcs`);
+
     console.log(
-      'vc:: >>>>',
-      JSON.stringify(presentationResponse.data, null, 2),
+      'Issuance Response:',
+      JSON.stringify(formattedResponse, null, 2),
     );
+
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Error:', {

@@ -1,7 +1,10 @@
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
+  SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
@@ -23,9 +26,17 @@ export class MessagingGateway
 
   handleConnection(client: any): void {
     Logger.log(`Client connected: ${client.id}`);
+    client.onAny((event, ...args) => {
+      Logger.log(
+        `Socket event: ${event}, data: ${JSON.stringify(args)}`,
+        this.constructor.name,
+      );
+    });
   }
 
   handleDisconnect(client: any): void {
     Logger.log(`Client disconnected: ${client.id}`);
   }
+
+
 }

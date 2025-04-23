@@ -1,4 +1,6 @@
 import axios from 'axios';
+import * as qrcode from 'qrcode-terminal';
+
 const API_URL = 'http://localhost:8000';
 
 async function testInvitation() {
@@ -24,12 +26,13 @@ async function testInvitation() {
       invitationId: invitationData.id,
       oobContentData: `didcomm://?_oob=${base64Invitation}`,
     };
-
     console.log(
       'Issuance Response:',
       JSON.stringify(formattedResponse, null, 2),
     );
 
+    console.log('\n=== QR Code ===');
+    qrcode.generate(formattedResponse.oobContentData, { small: true });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Error:', {

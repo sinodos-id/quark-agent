@@ -21,14 +21,17 @@ export const WACIProtocolProvider: Provider = {
                 credential: {
                   '@context': [
                     'https://www.w3.org/2018/credentials/v1',
-                    'https://www.w3.org/2018/credentials/examples/v1',
-                    'https://w3id.org/security/bbs/v1',
+                    'https://w3id.org/security/bbs/v1'
                   ],
-                  id: 'http://example.edu/credentials/58473',
-                  type: ['VerifiableCredential', 'AlumniCredential'],
-                  issuer:
-                    'did:quarkid:EiDn8vlOnYx2y270R7jyeR8EF93LPk99MPHk8oiGrtLKVQ',
+                  id: `urn:uuid:${generateUUID()}`,
+                  type: ['VerifiableCredential'],
+                  name: 'Alumni',
+                  issuer: {
+                    id: 'did:quarkid:EiA9TCMjKqcM8FRHypJpKbaotnrcX-BvsoA_Ba4sPowstw',
+                    name: 'National University'
+                  },
                   issuanceDate: new Date(),
+                  expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
                   credentialSubject: {
                     id: holderId,
                     givenName: 'John',
@@ -37,40 +40,32 @@ export const WACIProtocolProvider: Provider = {
                 },
                 outputDescriptor: {
                   id: 'alumni_credential_output',
-                  schema:
-                    'https://schema.org/EducationalOccupationalCredential',
                   display: {
                     title: {
-                      path: ['$.type[1]'],
-                      fallback: 'Alumni Credential',
+                      text: 'Alumni Credential'
                     },
                     subtitle: {
-                      path: ['$.issuer'],
-                      fallback: 'National University',
+                      text: 'National University'
                     },
                     description: {
                       text: 'Credential that allows validating that they are a student of the institution',
                     },
                     properties: [
                       {
-                        label: 'Given Name',
                         path: ['$.credentialSubject.givenName'],
+                        fallback: 'Unknown',
+                        label: 'Given Name',
+                        schema: {
+                          type: 'string'
+                        }
                       },
                       {
-                        label: 'Family Name',
                         path: ['$.credentialSubject.familyName'],
-                      },
-                      {
-                        label: 'Issuer',
-                        path: ['$.issuer'],
-                      },
-                      {
-                        label: 'Issuance Date',
-                        path: ['$.issuanceDate'],
-                      },
-                      {
-                        label: 'Credential Type',
-                        path: ['$.type[1]'],
+                        fallback: 'Unknown',
+                        label: 'Family Name',
+                        schema: {
+                          type: 'string'
+                        }
                       }
                     ],
                   },
@@ -121,21 +116,20 @@ export const WACIProtocolProvider: Provider = {
             frame: {
               '@context': [
                 'https://www.w3.org/2018/credentials/v1',
-                'https://www.w3.org/2018/credentials/examples/v1',
-                'https://w3id.org/security/bbs/v1',
+                'https://w3id.org/security/bbs/v1'
               ],
-              type: ['VerifiableCredential', 'AlumniCredential'],
+              type: ['VerifiableCredential'],
               credentialSubject: {
                 '@explicit': true,
-                type: ['VerifiableCredential', 'AlumniCredential'],
+                type: ['AlumniCredential'],
                 givenName: {},
                 familyName: {},
               },
             },
             inputDescriptors: [
               {
-                id: 'http://example.edu/credentials/58473',
-                name: 'AlumniCredential',
+                id: 'alumni_credential',
+                name: 'Alumni',
                 purpose: 'We need to verify your alumni status',
                 constraints: {
                   fields: [
@@ -162,3 +156,12 @@ export const WACIProtocolProvider: Provider = {
   },
   inject: [CONFIG],
 };
+
+// Helper function to generate UUID
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}

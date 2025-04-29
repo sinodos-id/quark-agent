@@ -16,6 +16,10 @@ export const WACIProtocolProvider: Provider = {
           holderId: string,
         ) => {
           return new WACICredentialOfferSucceded({
+            options: {
+              challenge: 'someChallenge123',
+              domain: 'example.com',
+            },
             credentials: [
               {
                 credential: {
@@ -30,7 +34,7 @@ export const WACIProtocolProvider: Provider = {
                     'did:quarkid:EiA9TCMjKqcM8FRHypJpKbaotnrcX-BvsoA_Ba4sPowstw',
                   issuanceDate: new Date(),
                   credentialSubject: {
-                    id: holderId,
+                    id: 'did:example:holder123',
                     givenName: 'John',
                     familyName: 'Doe',
                   },
@@ -55,22 +59,32 @@ export const WACIProtocolProvider: Provider = {
                       {
                         label: 'Given Name',
                         path: ['$.credentialSubject.givenName'],
+                        fallback: 'Unknown', // Add fallback
+                        schema: { type: 'string' }, // Add schema type
                       },
                       {
                         label: 'Family Name',
                         path: ['$.credentialSubject.familyName'],
+                        fallback: 'Unknown', // Add fallback
+                        schema: { type: 'string' }, // Add schema type
                       },
                       {
                         label: 'Issuer',
                         path: ['$.issuer'],
+                        fallback: 'Unknown Issuer', // Add fallback
+                        schema: { type: 'string' }, // Add schema type
                       },
                       {
                         label: 'Issuance Date',
                         path: ['$.issuanceDate'],
+                        fallback: 'No date provided', // Add fallback
+                        schema: { type: 'string' }, // Add schema with format
                       },
                       {
                         label: 'Credential Type',
                         path: ['$.type[1]'],
+                        fallback: 'Credential', // Add fallback
+                        schema: { type: 'string' }, // Add schema type
                       },
                     ],
                   },
@@ -118,20 +132,6 @@ export const WACIProtocolProvider: Provider = {
       verifier: {
         presentationDefinition: async (invitationId: string) => {
           return {
-            // frame: {
-            //   '@context': [
-            //     'https://www.w3.org/2018/credentials/v1',
-            //     'https://www.w3.org/2018/credentials/examples/v1',
-            //     'https://w3id.org/security/bbs/v1',
-            //   ],
-            //   type: ['VerifiableCredential'],
-            //   credentialSubject: {
-            //     '@explicit': true,
-            //     type: ['AlumniCredential'],
-            //     givenName: {},
-            //     familyName: {},
-            //   },
-            // },
             inputDescriptors: [
               {
                 id: 'http://example.edu/credentials/58473',

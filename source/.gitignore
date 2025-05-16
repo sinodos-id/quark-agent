@@ -1,6 +1,9 @@
 agent-storage.json
 waci-storage.json
 agent-secure-storage.json
+
+storage/*
+
 # compiled output
 /dist
 /node_modules

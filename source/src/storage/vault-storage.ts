@@ -11,7 +11,7 @@ export class VaultStorage implements AgentSecureStorage {
       roleId: config.VAULT_ROLE_ID,
       secretId: config.VAULT_SECRET_ID,
       vaultUrl: config.VAULT_URL,
-      expirationThresholdMillis: 24
+      expirationThresholdMillis: 24,
     });
   }
 

@@ -5,16 +5,13 @@ import { VerifiableCredentialService } from '@extrimian/vc-core';
 import { MessagingGateway } from './controllers/messaging.gateway';
 import { ConfigProvider } from './config';
 import { WebsocketServerTransport } from '@extrimian/agent';
-import { VaultStorage } from './storage/vault-storage';
+import { JsonStorage } from './storage/memory-storage';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
-
+import { WACIProtocolProvider } from './services/waci-protocol.provider';
 
 @Module({
-  imports: [
-    // MongooseModule.forRoot(process.env.MONGO_URI),
-    AuthModule
-  ],
+  imports: [AuthModule],
   controllers: [HealthController, AppController],
   providers: [
     {
@@ -25,8 +22,12 @@ import { AuthModule } from './auth/auth.module';
       provide: WebsocketServerTransport,
       useClass: WebsocketServerTransport,
     },
+    WACIProtocolProvider,
     ConfigProvider,
-    VaultStorage,
+    {
+      provide: 'AGENT_SECURE_STORAGE',
+      useClass: JsonStorage,
+    },
     AgentProvider,
     MessagingGateway,
   ],

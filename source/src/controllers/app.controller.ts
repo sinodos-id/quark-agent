@@ -7,19 +7,15 @@ import {
   Get,
   Inject,
   Post,
-  UseGuards,
 } from '@nestjs/common';
-import { decode } from 'base-64';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import { ApiTokenAuthGuard } from 'src/auth/guard/apitoken-auth.guard';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
   SIGNUP = 'extrimian/did-authentication/signup',
 }
 
-@UseGuards(ApiTokenAuthGuard)
 @Controller()
 export class AppController {
   constructor(
@@ -27,7 +23,6 @@ export class AppController {
     @Inject(CONFIG) private config: Configuration,
   ) {}
 
-  // Refactor
   @Post('message')
   async createInvitation(@Body('goalCode') goalCode: GoalCode | OobGoalCode) {
     let flow: CredentialFlow;
@@ -44,7 +39,19 @@ export class AppController {
     }
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
-    const invitationDecoded = JSON.parse(decode(invitationSplit));
+
+    let invitationDecoded = {};
+
+    try {
+      const decodedString = Buffer.from(invitationSplit, 'base64').toString(
+        'utf-8',
+      );
+      invitationDecoded = JSON.parse(decodedString);
+    } catch (error) {
+      console.error('Error decoding invitation:', error);
+      // Optional: Set default values or re-throw error
+    }
+
     return invitationDecoded;
   }
 

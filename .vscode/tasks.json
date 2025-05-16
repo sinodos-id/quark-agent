@@ -1,0 +1,16 @@
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Use Node 21",
+      "type": "shell",
+      "command": "fish -c 'nvm use 21'",
+      "presentation": {
+        "reveal": "always",
+        "focus": false
+      },
+      "problemMatcher": []
+    }
+  ]
+}

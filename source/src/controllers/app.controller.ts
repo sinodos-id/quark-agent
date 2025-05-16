@@ -10,14 +10,12 @@ import {
 } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-// import { ApiTokenAuthGuard } from 'src/auth/guard/apitoken-auth.guard';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
   SIGNUP = 'extrimian/did-authentication/signup',
 }
 
-// @UseGuards(ApiTokenAuthGuard)
 @Controller()
 export class AppController {
   constructor(
@@ -25,7 +23,6 @@ export class AppController {
     @Inject(CONFIG) private config: Configuration,
   ) {}
 
-  // Refactor
   @Post('message')
   async createInvitation(@Body('goalCode') goalCode: GoalCode | OobGoalCode) {
     let flow: CredentialFlow;

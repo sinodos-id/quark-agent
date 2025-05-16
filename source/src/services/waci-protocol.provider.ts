@@ -1,11 +1,11 @@
 import { Provider } from '@nestjs/common';
 import { WACIProtocol, WACICredentialOfferSucceded } from '@extrimian/agent';
 import { FileSystemStorage } from '../storage/filesystem-storage';
-import { Configuration, CONFIG } from '../config';
+import {CONFIG } from '../config';
 
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
-  useFactory: (config: Configuration) => {
+  useFactory: () => {
     return new WACIProtocol({
       storage: new FileSystemStorage({
         filepath: './storage/waci-storage.json',

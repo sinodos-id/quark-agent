@@ -37,6 +37,4 @@ export class MessagingGateway
   handleDisconnect(client: any): void {
     Logger.log(`Client disconnected: ${client.id}`);
   }
-
-
 }

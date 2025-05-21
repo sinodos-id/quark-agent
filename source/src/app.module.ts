@@ -9,6 +9,8 @@ import { JsonStorage } from './storage/memory-storage';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
+import { WaciCredentialDataService } from './services/waci-credential-data.service';
+import { WaciPresentationDataService } from './services/waci-presentation-data.service'; // Import the new service
 
 @Module({
   imports: [AuthModule],
@@ -30,6 +32,8 @@ import { WACIProtocolProvider } from './services/waci-protocol.provider';
     },
     AgentProvider,
     MessagingGateway,
+    WaciCredentialDataService,
+    WaciPresentationDataService, // Add the new service to providers
   ],
 })
 export class AppModule {}

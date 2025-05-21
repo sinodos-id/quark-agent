@@ -6,7 +6,7 @@ import { WaciCredentialDataService } from './waci-credential-data.service';
 
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
-  useFactory: (waciCredentialDataService: WaciCredentialDataService) => {
+  useFactory: (config: any, waciCredentialDataService: WaciCredentialDataService) => {
     return new WACIProtocol({
       storage: new FileSystemStorage({
         filepath: './storage/waci-storage.json',
@@ -49,7 +49,7 @@ export const WACIProtocolProvider: Provider = {
             '@context': [
               'https://www.w3.org/2018/credentials/v1',
               'https://w3id.org/security/bbs/v1',
-              'https://w3id.org/ns/credentials/examples#', // Changed to string
+              // 'https://w3id.org/ns/credentials/examples#', // Changed to string
             ],
             name: options.displayTitle,
             id: `urn:uuid:${waciInvitationId}`, // Using invitationId as credential ID for simplicity

@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
+import { WaciCredentialDataService, StoredCredentialData } from '../services/waci-credential-data.service'; // Import the service and interface
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
@@ -21,10 +22,14 @@ export class AppController {
   constructor(
     private agent: Agent,
     @Inject(CONFIG) private config: Configuration,
+    private waciCredentialDataService: WaciCredentialDataService, // Inject the service
   ) {}
 
   @Post('message')
-  async createInvitation(@Body('goalCode') goalCode: GoalCode | OobGoalCode) {
+  async createInvitation(
+    @Body('goalCode') goalCode: GoalCode | OobGoalCode,
+    @Body('credentialData') credentialData?: StoredCredentialData, // Accept optional credentialData
+  ) {
     let flow: CredentialFlow;
     switch (goalCode) {
       case GoalCode.Issuance:
@@ -40,15 +45,21 @@ export class AppController {
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
 
-    let invitationDecoded = {};
+    let invitationDecoded: any = {}; // Use any for decoded invitation
 
     try {
       const decodedString = Buffer.from(invitationSplit, 'base64').toString(
         'utf-8',
       );
       invitationDecoded = JSON.parse(decodedString);
+
+      // Store credential data if provided for issuance flow
+      if (flow === CredentialFlow.Issuance && credentialData && invitationDecoded.id) {
+        this.waciCredentialDataService.storeData(invitationDecoded.id, credentialData);
+      }
+
     } catch (error) {
-      console.error('Error decoding invitation:', error);
+      console.error('Error decoding invitation or storing data:', error); // Updated error message
       // Optional: Set default values or re-throw error
     }
 

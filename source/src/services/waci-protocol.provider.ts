@@ -49,7 +49,7 @@ export const WACIProtocolProvider: Provider = {
             '@context': [
               'https://www.w3.org/2018/credentials/v1',
               'https://w3id.org/security/bbs/v1',
-              // 'https://w3id.org/ns/credentials/examples#', // Changed to string
+              { "@vocab": "https://www.w3.org/ns/credentials/examples#" }
             ],
             name: options.displayTitle,
             id: `urn:uuid:${waciInvitationId}`, // Using invitationId as credential ID for simplicity
@@ -147,7 +147,7 @@ export const WACIProtocolProvider: Provider = {
             },
             credentials: [
               {
-                credential: credentialData,
+                credential: credentialData as any, // Assert type to bypass strict check
                 outputDescriptor: outputDescriptor,
               },
             ],

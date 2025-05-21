@@ -9,7 +9,7 @@ async function testInvitation() {
     console.log('\n=== Testing Issuance Flow with Schema ===');
 
     const credentialSchema = {
-      "types": ["SampleCredential"], // Added a sample type as types array is empty in schema
+      "types": ["SampleCredential"],
       "fields": [
         {
           "name": "name",
@@ -51,14 +51,14 @@ async function testInvitation() {
     // Construct credentialData based on the schema and mocked data
     const credentialData = {
       issuerDid: 'did:quarkid:EiAio855zQwqHqcJOPx5NrM_sKWaqfZJ8Efs552cb9A7aQ',
-      nameDid: 'Mock Issuer Name', // Mock issuer name DID
+      nameDid: 'Mock Issuer Name',
       credentialSubject: mockCredentialSubject,
       options: {
         expirationDays: credentialSchema.expirationDays,
         oneTimeUse: credentialSchema.oneTimeUse,
         displayTitle: credentialSchema.types.length > 0 ? credentialSchema.types[0] : 'Credential', // Use first type as title or default
-        displaySubtitle: 'Issued by Mock Issuer', // Mock subtitle
-        displayDescription: 'This is a mock credential based on a schema.', // Mock description
+        displaySubtitle: 'Issued by Mock Issuer',
+        displayDescription: 'This is a mock credential based on a schema.',
         type: credentialSchema.types,
         heroImage: credentialSchema.heroImage,
       },

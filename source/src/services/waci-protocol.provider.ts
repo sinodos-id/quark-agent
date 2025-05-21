@@ -3,10 +3,11 @@ import { WACIProtocol, WACICredentialOfferSucceded } from '@extrimian/agent';
 import { FileSystemStorage } from '../storage/filesystem-storage';
 import { CONFIG } from '../config';
 import { WaciCredentialDataService } from './waci-credential-data.service';
+import { WaciPresentationDataService } from './waci-presentation-data.service'; // Import the new service
 
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
-  useFactory: (config: any, waciCredentialDataService: WaciCredentialDataService) => {
+  useFactory: (config: any, waciCredentialDataService: WaciCredentialDataService, waciPresentationDataService: WaciPresentationDataService) => {
     return new WACIProtocol({
       storage: new FileSystemStorage({
         filepath: './storage/waci-storage.json',
@@ -157,7 +158,18 @@ export const WACIProtocolProvider: Provider = {
       },
       verifier: {
         presentationDefinition: async (invitationId: string) => {
-          // Keep existing verifier logic as it seems unrelated to the issuance data
+          const storedPresentationData = waciPresentationDataService.getData(invitationId);
+
+          // Remove data after use
+          waciPresentationDataService.removeData(invitationId);
+
+          if (storedPresentationData) {
+            return {
+              inputDescriptors: storedPresentationData,
+            };
+          }
+
+          // Keep existing default verifier logic if no data is stored
           return {
             inputDescriptors: [
               {
@@ -187,5 +199,5 @@ export const WACIProtocolProvider: Provider = {
       },
     });
   },
-  inject: [CONFIG, WaciCredentialDataService], // Inject the new service
+  inject: [CONFIG, WaciCredentialDataService, WaciPresentationDataService], // Inject the new service
 };

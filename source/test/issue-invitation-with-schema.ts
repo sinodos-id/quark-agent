@@ -50,7 +50,7 @@ async function testInvitation() {
 
     // Construct credentialData based on the schema and mocked data
     const credentialData = {
-      issuerDid: 'did:quarkid:EiAio855zQwqHqcJOPx5NrM_sKWaqfZJ8Efs552cb9A7aQ',
+      // issuerDid: 'did:quarkid:EiAio855zQwqHqcJOPx5NrM_sKWaqfZJ8Efs552cb9A7aQ',
       nameDid: 'Mock Issuer Name',
       credentialSubject: mockCredentialSubject,
       options: {

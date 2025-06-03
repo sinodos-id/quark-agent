@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Logger } from '../utils/logger';
 
 interface StoredCredentialData {
   issuerDid: string;
@@ -13,8 +14,8 @@ interface StoredCredentialData {
     type: string[];
     heroImage?: string;
   };
-  styles?: any; // Add styles property
-  issuer?: any; // Add issuer property
+  styles?: any;
+  issuer?: any;
 }
 
 @Injectable()
@@ -22,11 +23,14 @@ export class WaciCredentialDataService {
   private credentialDataMap = new Map<string, StoredCredentialData>();
 
   storeData(invitationId: string, data: StoredCredentialData): void {
+    Logger.debug('Storing credential data', { invitationId });
     this.credentialDataMap.set(invitationId, data);
   }
 
   getData(invitationId: string): StoredCredentialData | undefined {
-    return this.credentialDataMap.get(invitationId);
+    const data = this.credentialDataMap.get(invitationId);
+    Logger.debug('Retrieved credential data', { invitationId, found: !!data });
+    return data;
   }
 
   removeData(invitationId: string): void {

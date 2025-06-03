@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-// const API_URL = 'http://localhost:8000';
-const API_URL = 'https://message-manager-production.up.railway.app';
+const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://message-manager-production.up.railway.app';
 
 async function testInvitation() {
   try {

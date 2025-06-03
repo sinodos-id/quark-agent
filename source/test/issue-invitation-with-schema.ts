@@ -56,7 +56,7 @@ async function testInvitation() {
       options: {
         expirationDays: credentialSchema.expirationDays,
         oneTimeUse: credentialSchema.oneTimeUse,
-        displayTitle: credentialSchema.types.length > 0 ? credentialSchema.types[0] : 'Credential', // Use first type as title or default
+        displayTitle: credentialSchema.types.length > 0 ? credentialSchema.types[0] : 'Credential',
         displaySubtitle: 'Issued by Mock Issuer',
         displayDescription: 'This is a mock credential based on a schema.',
         type: credentialSchema.types,

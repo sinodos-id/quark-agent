@@ -7,12 +7,17 @@ import {
   Get,
   Inject,
   Post,
+  InternalServerErrorException,
 } from '@nestjs/common';
+import { Logger } from '../utils/logger';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import { WaciCredentialDataService, StoredCredentialData } from '../services/waci-credential-data.service';
+import {
+  WaciCredentialDataService,
+  StoredCredentialData,
+} from '../services/waci-credential-data.service';
 import { WaciPresentationDataService } from '../services/waci-presentation-data.service';
-import { InputDescriptor } from '@extrimian/agent/node_modules/@extrimian/waci/dist/types/credential-manifest'; // Import InputDescriptor from the library
+import { InputDescriptor } from '@extrimian/agent/node_modules/@extrimian/waci/dist/types/credential-manifest';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
@@ -49,7 +54,7 @@ export class AppController {
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
 
-    let invitationDecoded: any = {}; 
+    let invitationDecoded: any = {};
 
     try {
       const decodedString = Buffer.from(invitationSplit, 'base64').toString(
@@ -58,19 +63,45 @@ export class AppController {
       invitationDecoded = JSON.parse(decodedString);
 
       // Store credential data if provided for issuance flow
-      if (flow === CredentialFlow.Issuance && credentialData && invitationDecoded.id) {
-        this.waciCredentialDataService.storeData(invitationDecoded.id, credentialData);
+      if (
+        flow === CredentialFlow.Issuance &&
+        credentialData &&
+        invitationDecoded.id
+      ) {
+        this.waciCredentialDataService.storeData(
+          invitationDecoded.id,
+          credentialData,
+        );
       }
 
       // Store presentation data if provided for presentation flow
-      if (flow === CredentialFlow.Presentation && presentationData && invitationDecoded.id) {
-        this.waciPresentationDataService.storeData(invitationDecoded.id, presentationData);
+      if (
+        flow === CredentialFlow.Presentation &&
+        presentationData &&
+        invitationDecoded.id
+      ) {
+        this.waciPresentationDataService.storeData(
+          invitationDecoded.id,
+          presentationData,
+        );
       }
-
     } catch (error) {
-      console.error('Error decoding invitation or storing data:', error); // Updated error message
-      // Optional: Set default values or re-throw error
+      Logger.error('Failed to process invitation', error, {
+        goalCode,
+        flow,
+        hasCredentialData: !!credentialData,
+        hasPresentationData: !!presentationData,
+      });
+      throw new InternalServerErrorException('Failed to process invitation');
     }
+
+    Logger.debug('Successfully created invitation', {
+      goalCode,
+      flow,
+      invitationId: invitationDecoded.id,
+      hasCredentialData: !!credentialData,
+      hasPresentationData: !!presentationData,
+    });
 
     return invitationDecoded;
   }
@@ -82,6 +113,11 @@ export class AppController {
 
   @Post('send-invitation')
   sendInvitation(@Body() body: any): void {
+    Logger.debug('Sending invitation message', {
+      to: body.to,
+      messageLength: body.message?.length,
+    });
+
     this.agent.messaging.sendMessage({
       to: DID.from(body.to),
       message: body.message,

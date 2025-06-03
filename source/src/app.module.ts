@@ -10,30 +10,33 @@ import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
 import { WaciCredentialDataService } from './services/waci-credential-data.service';
-import { WaciPresentationDataService } from './services/waci-presentation-data.service'; // Import the new service
+import { WaciPresentationDataService } from './services/waci-presentation-data.service';
+import { INJECTION_TOKENS } from './constants/injection-tokens';
+import { CredentialBuilderService } from './services/credential-builder.service';
 
 @Module({
   imports: [AuthModule],
   controllers: [HealthController, AppController],
   providers: [
     {
-      provide: VerifiableCredentialService,
+      provide: INJECTION_TOKENS.VERIFIABLE_CREDENTIAL_SERVICE,
       useClass: VerifiableCredentialService,
     },
     {
-      provide: WebsocketServerTransport,
+      provide: INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
       useClass: WebsocketServerTransport,
+    },
+    {
+      provide: INJECTION_TOKENS.AGENT_SECURE_STORAGE,
+      useClass: JsonStorage,
     },
     WACIProtocolProvider,
     ConfigProvider,
-    {
-      provide: 'AGENT_SECURE_STORAGE',
-      useClass: JsonStorage,
-    },
     AgentProvider,
     MessagingGateway,
     WaciCredentialDataService,
-    WaciPresentationDataService, // Add the new service to providers
+    WaciPresentationDataService,
+    CredentialBuilderService,
   ],
 })
 export class AppModule {}

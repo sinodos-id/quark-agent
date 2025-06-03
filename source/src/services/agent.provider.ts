@@ -10,13 +10,15 @@ import {
   WebsocketServerTransport,
   WebsocketClientTransport,
 } from '@extrimian/agent';
+import { INJECTION_TOKENS } from '../constants/injection-tokens';
+import { Logger } from '../utils/logger';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
   inject: [
-    'AGENT_SECURE_STORAGE',
+    INJECTION_TOKENS.AGENT_SECURE_STORAGE,
     WACIProtocol,
-    WebsocketServerTransport,
+    INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
     CONFIG,
   ],
   useFactory: async (
@@ -58,14 +60,17 @@ export const AgentProvider: FactoryProvider<Agent> = {
     }
 
     agent.vc.ackCompleted.on((param) => {
-      console.log('ack completed', param);
+      Logger.debug('Acknowledgment completed', { param });
     });
 
     agent.vc.presentationVerified.on((param) => {
-      console.log('ack completed', param);
+      Logger.debug('Presentation verified', { param });
     });
 
     agent.vc.credentialArrived.on(async (vcs) => {
+      Logger.debug('Processing arrived credentials', {
+        count: vcs.credentials.length,
+      });
       await Promise.all(
         vcs.credentials.map((vc) => {
           agent.vc.saveCredentialWithInfo(vc.data, {
@@ -77,7 +82,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     });
 
     agent.vc.credentialPresented.on((data) => {
-      console.log('Credential presented:', {
+      Logger.debug('Credential presented', {
         vcVerified: data.vcVerified,
         presentationVerified: data.presentationVerified,
         vcId: data.vc.id,
@@ -85,7 +90,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     });
 
     agent.vc.problemReport.on((data) => {
-      console.error('Problem report received:', {
+      Logger.error('Problem report received', {
         did: data.did.value,
         code: data.code,
         invitationId: data.invitationId,
@@ -93,9 +98,8 @@ export const AgentProvider: FactoryProvider<Agent> = {
       });
     });
 
-    // Log when credentials arrive
     agent.vc.credentialArrived.on((data) => {
-      console.log('Credentials arrived:', {
+      Logger.debug('Credentials arrived', {
         count: data.credentials.length,
         issuer: data.issuer.name,
         messageId: data.messageId,

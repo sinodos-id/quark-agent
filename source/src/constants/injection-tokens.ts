@@ -1,0 +1,8 @@
+/**
+ * Injection tokens for dependency injection
+ */
+export const INJECTION_TOKENS = {
+  AGENT_SECURE_STORAGE: Symbol('AGENT_SECURE_STORAGE'),
+  WEBSOCKET_TRANSPORT: Symbol('WEBSOCKET_TRANSPORT'),
+  VERIFIABLE_CREDENTIAL_SERVICE: Symbol('VERIFIABLE_CREDENTIAL_SERVICE'),
+} as const;

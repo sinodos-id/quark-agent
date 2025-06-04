@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HealthController } from './controllers/health.controller';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
@@ -13,6 +13,7 @@ import { WaciCredentialDataService } from './services/waci-credential-data.servi
 import { WaciPresentationDataService } from './services/waci-presentation-data.service';
 import { INJECTION_TOKENS } from './constants/injection-tokens';
 import { CredentialBuilderService } from './services/credential-builder.service';
+import { CorrelationMiddleware } from './middleware/correlation.middleware'; // Import CorrelationMiddleware
 
 @Module({
   imports: [AuthModule],
@@ -39,4 +40,8 @@ import { CredentialBuilderService } from './services/credential-builder.service'
     CredentialBuilderService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorrelationMiddleware).forRoutes('*');
+  }
+}

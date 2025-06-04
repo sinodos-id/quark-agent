@@ -2,11 +2,11 @@
 
 export interface OutgoingWebhookPayload {
   eventType: string;
-  eventData: any; // This will be one of the specific event data types
+  eventData: any;
 }
 
 export interface CredentialIssuedEventData {
-  vc: any; // Full verifiable credential object
+  vc: any; 
   holderDID: string;
 }
 
@@ -15,11 +15,7 @@ export interface VerifiablePresentationFinishedEventData {
   verified: boolean;
   verifiableCredentials: Array<{
     id: string;
-    // Other credential data properties as needed
   }>;
   holderDID: string;
-  // Additional metadata preserved as-is
   [key: string]: any;
 }
-
-// You can add other event data interfaces here if needed in the future

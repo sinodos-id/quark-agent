@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { asyncLocalStorage } from '../middleware/correlation.middleware';
 
 /**
  * Log levels for the application
@@ -17,32 +18,51 @@ export enum LogLevel {
 
 type LogContext = Record<string, unknown>;
 
+interface LogEntry {
+  timestamp: string;
+  level: LogLevel;
+  message: string;
+  correlationId?: string;
+  context?: LogContext;
+  error?: string;
+}
+
 @Injectable()
 export class Logger {
-  private static formatMessage(
+  private static getCurrentCorrelationId(): string | undefined {
+    const store = asyncLocalStorage.getStore();
+    return store?.correlationId;
+  }
+
+  private static formatLogEntry(
     level: LogLevel,
     message: string,
     context?: LogContext | string,
     error?: Error | unknown,
-  ): string {
+  ): LogEntry {
     const timestamp = new Date().toISOString();
-    let contextStr = '';
+    const correlationId = this.getCurrentCorrelationId();
 
+    let contextObj: LogContext | undefined;
     if (typeof context === 'string') {
-      contextStr = ` [${context}]`;
+      contextObj = { service: context };
     } else if (context) {
-      contextStr = ` ${JSON.stringify(context)}`;
+      contextObj = context;
     }
 
-    let logMessage = `${timestamp} ${level}${contextStr}: ${message}`;
-
+    let errorStr: string | undefined;
     if (error) {
-      const errorMessage =
-        error instanceof Error ? error.stack : JSON.stringify(error);
-      logMessage += `\n${errorMessage}`;
+      errorStr = error instanceof Error ? error.stack : JSON.stringify(error);
     }
 
-    return logMessage;
+    return {
+      timestamp,
+      level,
+      message,
+      correlationId,
+      ...(contextObj && { context: contextObj }),
+      ...(errorStr && { error: errorStr }),
+    };
   }
 
   private static shouldLog(level: LogLevel): boolean {
@@ -66,17 +86,15 @@ export class Logger {
 
   static log(message: string, context?: LogContext | string): void {
     if (this.shouldLog(LogLevel.INFO)) {
-      process.stdout.write(
-        this.formatMessage(LogLevel.INFO, message, context) + '\n',
-      );
+      const logEntry = this.formatLogEntry(LogLevel.INFO, message, context);
+      process.stdout.write(JSON.stringify(logEntry) + '\n');
     }
   }
 
   static warn(message: string, context?: LogContext | string): void {
     if (this.shouldLog(LogLevel.WARN)) {
-      process.stdout.write(
-        this.formatMessage(LogLevel.WARN, message, context) + '\n',
-      );
+      const logEntry = this.formatLogEntry(LogLevel.WARN, message, context);
+      process.stdout.write(JSON.stringify(logEntry) + '\n');
     }
   }
 
@@ -86,17 +104,20 @@ export class Logger {
     context?: LogContext | string,
   ): void {
     if (this.shouldLog(LogLevel.ERROR)) {
-      process.stderr.write(
-        this.formatMessage(LogLevel.ERROR, message, context, error) + '\n',
+      const logEntry = this.formatLogEntry(
+        LogLevel.ERROR,
+        message,
+        context,
+        error,
       );
+      process.stderr.write(JSON.stringify(logEntry) + '\n');
     }
   }
 
   static debug(message: string, context?: LogContext | string): void {
     if (this.shouldLog(LogLevel.DEBUG)) {
-      process.stdout.write(
-        this.formatMessage(LogLevel.DEBUG, message, context) + '\n',
-      );
+      const logEntry = this.formatLogEntry(LogLevel.DEBUG, message, context);
+      process.stdout.write(JSON.stringify(logEntry) + '\n');
     }
   }
 }

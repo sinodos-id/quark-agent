@@ -14,6 +14,7 @@ import { INJECTION_TOKENS } from '../constants/injection-tokens';
 import { Logger } from '../utils/logger';
 import { OutgoingWebhookService } from './outgoing-webhook.service';
 import { VerifiablePresentationFinishedEventData } from '../webhooks/dtos/outgoing-webhook.dto';
+import { WaciPresentationDataService } from './waci-presentation-data.service';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
@@ -23,6 +24,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
     CONFIG,
     OutgoingWebhookService,
+    WaciPresentationDataService,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
@@ -30,6 +32,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     transport: WebsocketServerTransport,
     config: Configuration,
     outgoingWebhookService: OutgoingWebhookService,
+    waciPresentationDataService: WaciPresentationDataService,
   ) => {
     const agent = new Agent({
       didDocumentRegistry: new AgentModenaUniversalRegistry(config.MODENA_URL),
@@ -70,8 +73,6 @@ export const AgentProvider: FactoryProvider<Agent> = {
     agent.vc.presentationVerified.on(async (param) => {
       Logger.debug('Presentation verified', { param });
 
-      // Extract holderDID from the verifiable credential
-      // VerifiableCredential might have holder in different locations
       const firstVc = param.vcs?.[0] as any;
       const holderDID =
         firstVc?.holder ||
@@ -79,8 +80,17 @@ export const AgentProvider: FactoryProvider<Agent> = {
         firstVc?.data?.holder ||
         'unknown';
 
+      let originalInvitationId =
+        waciPresentationDataService.getInvitationIdFromThread(param.thid);
+
+      // If no thread mapping found, try to find any invitation ID with stored data
+      if (!originalInvitationId) {
+        originalInvitationId =
+          waciPresentationDataService.findInvitationIdWithData();
+      }
+
       const presentationEventData: VerifiablePresentationFinishedEventData = {
-        invitationId: param.messageId, // Use messageId as the invitationId
+        invitationId: originalInvitationId || param.thid, // Use mapped invitation ID or fallback to thid
         verified: param.verified,
         verifiableCredentials:
           param.vcs?.map((vc) => ({
@@ -90,6 +100,13 @@ export const AgentProvider: FactoryProvider<Agent> = {
         thid: param.thid,
         messageId: param.messageId,
       };
+
+      Logger.debug('Presentation verified - ID mapping', {
+        thid: param.thid,
+        originalInvitationId,
+        usingInvitationId: originalInvitationId || param.thid,
+        allStoredIds: waciPresentationDataService.getAllStoredInvitationIds(),
+      });
       try {
         await outgoingWebhookService.sendVerifiablePresentationFinishedWebhook(
           presentationEventData,
@@ -129,6 +146,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
         vcVerified: data.vcVerified,
         presentationVerified: data.presentationVerified,
         vcId: data.vc.id,
+        fullData: data, // Log the full data to see what's available
       });
     });
 

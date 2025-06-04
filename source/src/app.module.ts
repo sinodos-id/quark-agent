@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  forwardRef,
+} from '@nestjs/common';
 import { HealthController } from './controllers/health.controller';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
@@ -14,9 +19,10 @@ import { WaciPresentationDataService } from './services/waci-presentation-data.s
 import { INJECTION_TOKENS } from './constants/injection-tokens';
 import { CredentialBuilderService } from './services/credential-builder.service';
 import { CorrelationMiddleware } from './middleware/correlation.middleware'; // Import CorrelationMiddleware
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, forwardRef(() => WebhooksModule)],
   controllers: [HealthController, AppController],
   providers: [
     {
@@ -39,6 +45,7 @@ import { CorrelationMiddleware } from './middleware/correlation.middleware'; // 
     WaciPresentationDataService,
     CredentialBuilderService,
   ],
+  exports: [ConfigProvider], // Export ConfigProvider
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

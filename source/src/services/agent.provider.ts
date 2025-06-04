@@ -12,6 +12,8 @@ import {
 } from '@extrimian/agent';
 import { INJECTION_TOKENS } from '../constants/injection-tokens';
 import { Logger } from '../utils/logger';
+import { OutgoingWebhookService } from './outgoing-webhook.service';
+import { VerifiablePresentationFinishedEventData } from '../webhooks/dtos/outgoing-webhook.dto';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
@@ -20,12 +22,14 @@ export const AgentProvider: FactoryProvider<Agent> = {
     WACIProtocol,
     INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
     CONFIG,
+    OutgoingWebhookService,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
     waciProtocol: WACIProtocol,
     transport: WebsocketServerTransport,
     config: Configuration,
+    outgoingWebhookService: OutgoingWebhookService,
   ) => {
     const agent = new Agent({
       didDocumentRegistry: new AgentModenaUniversalRegistry(config.MODENA_URL),
@@ -63,8 +67,36 @@ export const AgentProvider: FactoryProvider<Agent> = {
       Logger.debug('Acknowledgment completed', { param });
     });
 
-    agent.vc.presentationVerified.on((param) => {
+    agent.vc.presentationVerified.on(async (param) => {
       Logger.debug('Presentation verified', { param });
+
+      // Extract holderDID from the verifiable credential
+      // VerifiableCredential might have holder in different locations
+      const firstVc = param.vcs?.[0] as any;
+      const holderDID =
+        firstVc?.holder ||
+        firstVc?.credentialSubject?.id ||
+        firstVc?.data?.holder ||
+        'unknown';
+
+      const presentationEventData: VerifiablePresentationFinishedEventData = {
+        invitationId: param.messageId, // Use messageId as the invitationId
+        verified: param.verified,
+        verifiableCredentials:
+          param.vcs?.map((vc) => ({
+            id: vc.id,
+          })) || [],
+        holderDID,
+        thid: param.thid,
+        messageId: param.messageId,
+      };
+      try {
+        await outgoingWebhookService.sendVerifiablePresentationFinishedWebhook(
+          presentationEventData,
+        );
+      } catch (error) {
+        Logger.error('Error sending presentation verified webhook', error);
+      }
     });
 
     agent.vc.credentialArrived.on(async (vcs) => {
@@ -79,6 +111,17 @@ export const AgentProvider: FactoryProvider<Agent> = {
           });
         }),
       );
+      // TODO: Map vcs data to webhook payload structure
+      // Assuming vcs.credentials[0].data is the VC and vcs.holderDID is available
+      // This mapping needs refinement based on the actual structure of vcs
+      try {
+        await outgoingWebhookService.sendCredentialIssuedWebhook(
+          vcs.credentials[0].data, // Placeholder, needs proper mapping
+          vcs.credentials[0].data.holder, // Accessing holder DID from the VC data
+        );
+      } catch (error) {
+        Logger.error('Error sending credential arrived webhook', error);
+      }
     });
 
     agent.vc.credentialPresented.on((data) => {
@@ -94,14 +137,6 @@ export const AgentProvider: FactoryProvider<Agent> = {
         did: data.did.value,
         code: data.code,
         invitationId: data.invitationId,
-        messageId: data.messageId,
-      });
-    });
-
-    agent.vc.credentialArrived.on((data) => {
-      Logger.debug('Credentials arrived', {
-        count: data.credentials.length,
-        issuer: data.issuer.name,
         messageId: data.messageId,
       });
     });

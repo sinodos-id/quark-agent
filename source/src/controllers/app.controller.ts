@@ -1,5 +1,5 @@
 import { Agent, CredentialFlow, DID } from '@extrimian/agent';
-import { GoalCode } from '@extrimian/waci';
+import { GoalCode, InputDescriptor } from '@extrimian/waci'; // Import InputDescriptor from @extrimian/waci
 import {
   BadRequestException,
   Body,
@@ -17,7 +17,6 @@ import {
   StoredCredentialData,
 } from '../services/waci-credential-data.service';
 import { WaciPresentationDataService } from '../services/waci-presentation-data.service';
-import { InputDescriptor } from '@extrimian/agent/node_modules/@extrimian/waci/dist/types/credential-manifest';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
@@ -30,7 +29,7 @@ export class AppController {
     private agent: Agent,
     @Inject(CONFIG) private config: Configuration,
     private waciCredentialDataService: WaciCredentialDataService,
-    private waciPresentationDataService: WaciPresentationDataService, // Inject the new service
+    private waciPresentationDataService: WaciPresentationDataService,
   ) {}
 
   @Post('message')

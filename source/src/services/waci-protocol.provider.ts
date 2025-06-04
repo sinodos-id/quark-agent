@@ -6,6 +6,7 @@ import { WaciCredentialDataService } from './waci-credential-data.service';
 import { WaciPresentationDataService } from './waci-presentation-data.service';
 import { Logger } from '../utils/logger';
 import { CredentialBuilderService } from './credential-builder.service';
+import { OutgoingWebhookService } from './outgoing-webhook.service'; // Import the new service
 
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
@@ -14,6 +15,7 @@ export const WACIProtocolProvider: Provider = {
     waciCredentialDataService: WaciCredentialDataService,
     waciPresentationDataService: WaciPresentationDataService,
     credentialBuilder: CredentialBuilderService,
+    outgoingWebhookService: OutgoingWebhookService, // Inject the new service
   ) => {
     return new WACIProtocol({
       storage: new FileSystemStorage({
@@ -56,18 +58,22 @@ export const WACIProtocolProvider: Provider = {
             styles: issuer?.styles,
           };
 
+          // Build the raw credential data for the webhook payload
+          const credentialData = credentialBuilder.buildCredentialData(
+            waciInvitationId,
+            holderId,
+            issuerInfo,
+            credentialSubject,
+            options,
+            styles,
+          );
+
           const credentialOffer = credentialBuilder.createCredentialOffer(
             waciInvitationId,
             holderId,
             issuerInfo,
             credentialSubject,
-            {
-              title: options.displayTitle,
-              subtitle: options.displaySubtitle,
-              description: options.displayDescription,
-              type: options.type,
-              expirationDays: options.expirationDays,
-            },
+            options,
             styles,
           );
 
@@ -75,6 +81,13 @@ export const WACIProtocolProvider: Provider = {
             invitationId: waciInvitationId,
             holderId,
           });
+
+          // Send the outgoing webhook for credential issued
+          // Pass the actual VC data and the holder's DID
+          await outgoingWebhookService.sendCredentialIssuedWebhook(
+            credentialData, // Use the built credentialData
+            holderId,
+          );
 
           waciCredentialDataService.removeData(waciInvitationId);
 
@@ -105,5 +118,6 @@ export const WACIProtocolProvider: Provider = {
     WaciCredentialDataService,
     WaciPresentationDataService,
     CredentialBuilderService,
+    OutgoingWebhookService, // Add the new service to the inject array
   ],
 };

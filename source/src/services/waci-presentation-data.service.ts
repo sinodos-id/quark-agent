@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InputDescriptor } from '@extrimian/agent/node_modules/@extrimian/waci/dist/types/credential-manifest'; // Import InputDescriptor from the library
+import { InputDescriptor } from '@extrimian/waci'; // Import InputDescriptor directly from @extrimian/waci
 
 @Injectable()
 export class WaciPresentationDataService {

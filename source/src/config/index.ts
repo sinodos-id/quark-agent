@@ -17,10 +17,15 @@ const config = {
   VAULT_SECRET_ID: process.env.VAULT_SECRET_ID,
   DWN_URL: process.env.DWN_URL,
   TOKEN_SECRET: process.env.TOKEN_SECRET,
+  TEST_WEBHOOK_URL: process.env.TEST_WEBHOOK_URL,
+  PROD_WEBHOOK_URL: process.env.PROD_WEBHOOK_URL,
 };
 
 export const CONFIG = Symbol.for('CONFIG');
-export type Configuration = typeof config;
+export type Configuration = typeof config & {
+  TEST_WEBHOOK_URL?: string;
+  PROD_WEBHOOK_URL?: string;
+};
 export const ConfigProvider: ValueProvider<Configuration> = {
   provide: CONFIG,
   useValue: config,

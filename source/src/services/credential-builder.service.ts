@@ -33,12 +33,6 @@ export class CredentialBuilderService {
     options: CredentialDisplayOptions,
     styles?: CredentialStyles,
   ) {
-    Logger.debug('Building credential data', {
-      invitationId,
-      holderId,
-      types: options.type,
-    });
-
     const expirationDate = new Date();
     expirationDate.setDate(
       expirationDate.getDate() + (options.expirationDays || 7),
@@ -158,6 +152,13 @@ export class CredentialBuilderService {
     options: CredentialDisplayOptions,
     styles?: CredentialStyles,
   ): WACICredentialOfferSucceded {
+    Logger.log('🎁 Creating WACI credential offer', {
+      invitationId,
+      holderId,
+      issuerName: issuer.name,
+      credentialTypes: options.type,
+    });
+
     const credentialData = this.buildCredentialData(
       invitationId,
       holderId,
@@ -175,7 +176,7 @@ export class CredentialBuilderService {
 
     const issuerDisplay = this.buildIssuerDisplay(options.title, styles);
 
-    return new WACICredentialOfferSucceded({
+    const credentialOffer = new WACICredentialOfferSucceded({
       options: {
         challenge: 'someChallenge123',
         domain: 'example.com',
@@ -188,5 +189,13 @@ export class CredentialBuilderService {
       ],
       issuer: issuerDisplay,
     });
+
+    Logger.log('✅ WACI credential offer created successfully', {
+      invitationId,
+      holderId,
+      credentialTypes: options.type,
+    });
+
+    return credentialOffer;
   }
 }

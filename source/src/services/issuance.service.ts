@@ -21,6 +21,11 @@ export class IssuanceService {
     oobContentData: string;
     credentialData: any;
   }> {
+    Logger.log('🚀 Starting dynamic credential issuance process', {
+      issuerDid: data.issuerDid,
+      credentialTypes: data.options.type,
+    });
+
     const { issuerDid, nameDid, credentialSubject, options, styles, issuer } =
       data;
 
@@ -31,6 +36,9 @@ export class IssuanceService {
     );
 
     // Build the credential data object (similar to the provided issueCredential method)
+    const vcId = uuidv4();
+    const subjectId = uuidv4();
+
     const credentialData = {
       did: issuerDid, // This seems redundant in the VC object itself, but keeping for structure
       oneTimeUse: options.oneTimeUse, // This is an option for the flow, not the VC
@@ -41,7 +49,7 @@ export class IssuanceService {
           { '@vocab': 'https://www.w3.org/ns/credentials/examples#' },
         ],
         name: options.displayTitle,
-        id: `urn:uuid:${uuidv4()}`, // Generate a new UUID for the VC ID
+        id: `urn:uuid:${vcId}`, // Generate a new UUID for the VC ID
         type: ['VerifiableCredential', ...(options.type || [])],
         issuer: {
           id: issuerDid,
@@ -50,7 +58,7 @@ export class IssuanceService {
         issuanceDate: new Date().toISOString(),
         expirationDate: expirationDate.toISOString(),
         credentialSubject: {
-          id: uuidv4(), // Generate a new UUID for the credentialSubject ID
+          id: subjectId, // Generate a new UUID for the credentialSubject ID
           ...credentialSubject,
         },
       },
@@ -116,10 +124,22 @@ export class IssuanceService {
     };
 
     // Initiate the local WACI issuance flow
+    Logger.log('📨 Creating WACI invitation message', {
+      flow: 'Issuance',
+      credentialTypes: options.type,
+    });
+
     const invitation = await this.agent.vc.createInvitationMessage({
       flow: CredentialFlow.Issuance,
     });
+
     const invitationSplit = invitation.split('?_oob=')[1];
+
+    if (!invitationSplit) {
+      const errorMessage = 'Invalid invitation format: missing _oob parameter';
+      Logger.error(errorMessage, null, { invitation });
+      throw new Error(errorMessage);
+    }
 
     let invitationDecoded: any = {};
     try {
@@ -128,7 +148,9 @@ export class IssuanceService {
       );
       invitationDecoded = JSON.parse(decodedString);
     } catch (error) {
-      Logger.error('Failed to decode invitation', error);
+      Logger.error('❌ Failed to decode invitation', error, {
+        base64Data: invitationSplit.substring(0, 100) + '...',
+      });
       throw new Error('Failed to decode invitation');
     }
 
@@ -136,17 +158,23 @@ export class IssuanceService {
 
     // Store the credential data using the invitation ID
     if (invitationId) {
+      Logger.log('💾 Storing credential data for invitation', {
+        invitationId,
+        credentialTypes: data.options.type,
+      });
+
       this.waciCredentialDataService.storeData(invitationId, data); // Store the original data structure
     } else {
       const errorMessage = 'Invitation ID not found in decoded invitation';
-      Logger.error(errorMessage);
+      Logger.error(errorMessage, null, {
+        decodedInvitation: invitationDecoded,
+      });
       throw new Error(errorMessage);
     }
 
-    Logger.debug('Successfully created invitation', {
-      invitationId,
+    Logger.log('🎉 Dynamic credential issuance initiated successfully', {
+      invitationId: invitationId,
       types: data.options.type,
-      issuerDid: data.issuerDid,
     });
 
     // Return the OOB URL and the constructed credential data

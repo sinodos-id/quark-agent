@@ -24,20 +24,22 @@ export const WACIProtocolProvider: Provider = {
           waciInvitationId: string,
           holderId: string,
         ) => {
+          Logger.log('🔄 WACI Protocol: Starting credential issuance', {
+            invitationId: waciInvitationId,
+            holderId,
+          });
+
           const storedData =
             waciCredentialDataService.getData(waciInvitationId);
 
           if (!storedData) {
-            const errorMessage = `No credential data found for invitation ID: ${waciInvitationId}`;
-            Logger.error(errorMessage);
+            const errorMessage = `❌ No credential data found for invitation ID: ${waciInvitationId}`;
+            Logger.error(errorMessage, null, {
+              invitationId: waciInvitationId,
+              holderId,
+            });
             throw new Error(errorMessage);
           }
-
-          Logger.debug('Processing credential data', {
-            invitationId: waciInvitationId,
-            holderId,
-            types: storedData.options.type,
-          });
 
           const {
             issuerDid,
@@ -69,9 +71,11 @@ export const WACIProtocolProvider: Provider = {
             styles,
           );
 
-          Logger.debug('Removing credential data after processing', {
+          Logger.log('✅ WACI Protocol: Credential issuance completed', {
             invitationId: waciInvitationId,
+            holderId,
           });
+
           waciCredentialDataService.removeData(waciInvitationId);
 
           return credentialOffer;

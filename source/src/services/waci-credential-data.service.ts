@@ -23,18 +23,22 @@ export class WaciCredentialDataService {
   private credentialDataMap = new Map<string, StoredCredentialData>();
 
   storeData(invitationId: string, data: StoredCredentialData): void {
-    Logger.debug('Storing credential data', { invitationId });
+    Logger.log('💾 Storing credential data in memory', { invitationId });
     this.credentialDataMap.set(invitationId, data);
   }
 
   getData(invitationId: string): StoredCredentialData | undefined {
     const data = this.credentialDataMap.get(invitationId);
-    Logger.debug('Retrieved credential data', { invitationId, found: !!data });
+    Logger.log('🔍 Retrieving credential data from memory', {
+      invitationId,
+      found: !!data,
+    });
     return data;
   }
 
   removeData(invitationId: string): void {
     this.credentialDataMap.delete(invitationId);
+    Logger.log('🗑️ Removed credential data from memory', { invitationId });
   }
 }
 

@@ -31,12 +31,17 @@ export class MessagingGateway
     });
 
     client.onAny((event, ...args) => {
-      Logger.debug('Socket event received', {
-        event,
-        data: args,
-        clientId: client.id,
-        gateway: this.constructor.name,
-      });
+      // Log specific credential-related events
+      if (
+        event.includes('credential') ||
+        event.includes('invitation') ||
+        event.includes('waci')
+      ) {
+        Logger.log('🔔 Credential-related socket event', {
+          event,
+          clientId: client.id,
+        });
+      }
     });
   }
 

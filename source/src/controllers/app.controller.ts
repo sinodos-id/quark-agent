@@ -39,6 +39,8 @@ export class AppController {
     @Body('credentialData') credentialData?: StoredCredentialData,
     @Body('presentationData') presentationData?: InputDescriptor[],
   ) {
+    Logger.log('🚀 API: Received invitation creation request', { goalCode });
+
     let flow: CredentialFlow;
     switch (goalCode) {
       case GoalCode.Issuance:
@@ -49,10 +51,23 @@ export class AppController {
         break;
 
       default:
+        Logger.error('❌ Unsupported goal code', null, { goalCode });
         throw new BadRequestException('Unsupported goal code');
     }
+
     const invitation = await this.agent.vc.createInvitationMessage({ flow });
     const invitationSplit = invitation.split('?_oob=')[1];
+
+    if (!invitationSplit) {
+      Logger.error(
+        '❌ Invalid invitation format: missing _oob parameter',
+        null,
+        {
+          invitation: invitation.substring(0, 100) + '...',
+        },
+      );
+      throw new InternalServerErrorException('Invalid invitation format');
+    }
 
     let invitationDecoded: any = {};
 
@@ -86,21 +101,19 @@ export class AppController {
         );
       }
     } catch (error) {
-      Logger.error('Failed to process invitation', error, {
+      Logger.error('❌ Failed to process invitation', error, {
         goalCode,
         flow,
         hasCredentialData: !!credentialData,
         hasPresentationData: !!presentationData,
+        base64Sample: invitationSplit?.substring(0, 50) + '...',
       });
       throw new InternalServerErrorException('Failed to process invitation');
     }
 
-    Logger.debug('Successfully created invitation', {
-      goalCode,
-      flow,
+    Logger.log('🎉 API: Invitation created successfully', {
       invitationId: invitationDecoded.id,
-      hasCredentialData: !!credentialData,
-      hasPresentationData: !!presentationData,
+      goalCode,
     });
 
     return invitationDecoded;

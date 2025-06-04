@@ -115,8 +115,7 @@ export class AppController {
       goalCode,
     });
 
-    const { id, ...rest } = invitationDecoded;
-    return { ...rest, invitationId: id };
+    return { ...invitationDecoded, invitationId: invitationDecoded.id };
   }
 
   @Get('issued-vcs')

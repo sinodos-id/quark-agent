@@ -3,8 +3,8 @@ import { WACICredentialOfferSucceded } from '@extrimian/agent';
 import { Logger } from '../utils/logger';
 
 export interface CredentialDisplayOptions {
-  title?: string;
-  subtitle?: string;
+  displayTitle?: string;
+  displaySubtitle?: string;
   description?: string;
   type: string[];
   expirationDays?: number;
@@ -128,7 +128,7 @@ export class CredentialBuilderService {
           identifier: 'http://schema.org/identifier',
         },
       ],
-      name: options.title,
+      name: options.displayTitle,
       id: `urn:uuid:${this.ensureStringId(invitationId, 'credential.id')}`,
       type: ['VerifiableCredential', ...(options.type || [])],
       issuer: {
@@ -153,10 +153,10 @@ export class CredentialBuilderService {
       id: `${options.type?.[0] || 'credential'}-output`,
       display: {
         title: {
-          text: options.title ?? 'AutoPen Credential',
+          text: options.displayTitle ?? 'AutoPen Credential',
         },
         subtitle: {
-          text: options.subtitle ?? 'Verified Credential',
+          text: options.displaySubtitle ?? 'Verified Credential',
         },
         description: {
           text: options.description ?? 'Verifiable Credential',
@@ -258,7 +258,7 @@ export class CredentialBuilderService {
       styles,
     );
 
-    const issuerDisplay = this.buildIssuerDisplay(options.title, styles);
+    const issuerDisplay = this.buildIssuerDisplay(options.displayTitle, styles);
 
     const credentialOffer = new WACICredentialOfferSucceded({
       options: {

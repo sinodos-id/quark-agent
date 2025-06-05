@@ -9,7 +9,8 @@ async function testInvitation() {
     console.log('\n=== Testing Issuance Flow ===');
     const issuanceResponse = await axios.post(`${API_URL}/message`, {
       goalCode: 'streamlined-vc',
-      credentialData: { // Add sample credential data
+      credentialData: {
+        // Add sample credential data
         issuerDid: 'did:example:issuer123',
         nameDid: 'Example Issuer',
         credentialSubject: {
@@ -22,7 +23,7 @@ async function testInvitation() {
           oneTimeUse: true,
           displayTitle: 'University Degree! !!!',
           displaySubtitle: 'Verified by Example University',
-          displayDescription: 'This credential verifies the holder\'s degree.',
+          displayDescription: "This credential verifies the holder's degree.",
           type: ['UniversityDegreeCredential'],
           heroImage: 'https://example.com/hero.png',
         },
@@ -35,8 +36,14 @@ async function testInvitation() {
         issuer: {
           name: 'Example University',
           styles: {
-            thumbnail: { uri: 'https://example.com/issuer_thumb.png', alt: 'Issuer Thumb' },
-            hero: { uri: 'https://example.com/issuer_hero.png', alt: 'Issuer Hero' },
+            thumbnail: {
+              uri: 'https://example.com/issuer_thumb.png',
+              alt: 'Issuer Thumb',
+            },
+            hero: {
+              uri: 'https://example.com/issuer_hero.png',
+              alt: 'Issuer Hero',
+            },
             background: { color: '#fedcba' },
             text: { color: '#654321' },
           },

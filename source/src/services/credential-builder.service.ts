@@ -120,6 +120,7 @@ export class CredentialBuilderService {
     return {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
+        'https://w3id.org/security/bbs/v1',
         {
           '@vocab': 'https://www.w3.org/ns/credentials/examples#',
           name: 'http://schema.org/name',

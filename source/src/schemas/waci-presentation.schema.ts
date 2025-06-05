@@ -11,4 +11,5 @@ export class WaciPresentation extends Document {
   presentationData: InputDescriptor[];
 }
 
-export const WaciPresentationSchema = SchemaFactory.createForClass(WaciPresentation);
+export const WaciPresentationSchema =
+  SchemaFactory.createForClass(WaciPresentation);

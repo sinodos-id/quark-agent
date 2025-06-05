@@ -113,6 +113,7 @@ export class AppController {
     Logger.log('🎉 API: Invitation created successfully', {
       invitationId: invitationDecoded.id,
       goalCode,
+      presentationData,
     });
 
     return { ...invitationDecoded, invitationId: invitationDecoded.id };

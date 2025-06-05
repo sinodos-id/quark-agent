@@ -6,7 +6,7 @@ export interface OutgoingWebhookPayload {
 }
 
 export interface CredentialIssuedEventData {
-  vc: any; 
+  vc: any;
   holderDID: string;
 }
 

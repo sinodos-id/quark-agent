@@ -9,7 +9,8 @@ async function testInvitation() {
     console.log('\n=== Testing Presentation Flow for Schema Fields ==='); // Updated log message
     const issuanceResponse = await axios.post(`${API_URL}/message`, {
       goalCode: 'streamlined-vp',
-      presentationData: [ // Data for schema fields
+      presentationData: [
+        // Data for schema fields
         {
           id: 'schema-fields-verification', // Unique ID for this descriptor
           name: 'Schema Fields Verification', // Descriptive name

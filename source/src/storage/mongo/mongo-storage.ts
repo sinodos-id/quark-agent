@@ -39,10 +39,7 @@ export class MongoAgentStorage
 }
 
 @Injectable()
-export class MongoVCStorage
-  extends MongoStorageBase
-  implements IAgentStorage
-{
+export class MongoVCStorage extends MongoStorageBase implements IAgentStorage {
   constructor(
     @InjectModel('vc_storage')
     model: Model<StorageDocument>,

@@ -9,7 +9,8 @@ async function testInvitation() {
     console.log('\n=== Testing Presentation Flow ==='); // Updated log message
     const issuanceResponse = await axios.post(`${API_URL}/message`, {
       goalCode: 'streamlined-vp',
-      presentationData: [ // Add sample presentation data
+      presentationData: [
+        // Add sample presentation data
         {
           id: 'credential-verification', // Example ID
           name: 'Alumni Credential Verification', // Example name

@@ -22,7 +22,10 @@ import { INJECTION_TOKENS } from './constants/injection-tokens';
 import { CredentialBuilderService } from './services/credential-builder.service';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
 import { WebhooksModule } from './webhooks/webhooks.module';
-import { WaciPresentation, WaciPresentationSchema } from './schemas/waci-presentation.schema';
+import {
+  WaciPresentation,
+  WaciPresentationSchema,
+} from './schemas/waci-presentation.schema';
 
 @Module({
   imports: [

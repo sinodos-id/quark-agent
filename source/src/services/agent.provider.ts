@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
-import { FileSystemStorage } from '../storage/filesystem-storage';
+import { MongoStorage } from '../storage/mongo-storage';
 import {
   Agent,
   AgentSecureStorage,
@@ -39,12 +39,8 @@ export const AgentProvider: FactoryProvider<Agent> = {
       didDocumentResolver: new AgentModenaUniversalResolver(config.MODENA_URL),
       vcProtocols: [waciProtocol],
       supportedTransports: [new WebsocketClientTransport()],
-      agentStorage: new FileSystemStorage({
-        filepath: './storage/agent-storage.json',
-      }),
-      vcStorage: new FileSystemStorage({
-        filepath: './vc-storage.json',
-      }),
+      agentStorage: new MongoStorage('agent_storage'),
+      vcStorage: new MongoStorage('vc_storage'),
       secureStorage,
     });
 

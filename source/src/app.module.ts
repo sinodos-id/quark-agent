@@ -10,7 +10,7 @@ import { VerifiableCredentialService } from '@extrimian/vc-core';
 import { MessagingGateway } from './controllers/messaging.gateway';
 import { ConfigProvider } from './config';
 import { WebsocketServerTransport } from '@extrimian/agent';
-import { JsonStorage } from './storage/memory-storage';
+import { MongoStorage } from './storage/mongo-storage';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
@@ -35,7 +35,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     },
     {
       provide: INJECTION_TOKENS.AGENT_SECURE_STORAGE,
-      useClass: JsonStorage,
+      useFactory: () => new MongoStorage('secure_storage'),
     },
     WACIProtocolProvider,
     ConfigProvider,

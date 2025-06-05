@@ -18,7 +18,7 @@ export const WACIProtocolProvider: Provider = {
     outgoingWebhookService: OutgoingWebhookService, // Inject the new service
   ) => {
     return new WACIProtocol({
-      storage: new MongoStorage('waci_storage'),
+      storage: new MongoStorage('vc_storage'),
       issuer: {
         issueCredentials: async (
           waciInvitationId: string,

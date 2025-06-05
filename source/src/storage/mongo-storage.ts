@@ -69,7 +69,11 @@ export class MongoStorage implements IAgentStorage, AgentSecureStorage {
   async update(key: string, data: any): Promise<void> {
     try {
       await this.ensureConnection();
-      await this.collection.updateOne({ key }, { $set: { value: data } });
+      await this.collection.updateOne(
+        { key },
+        { $set: { key, value: data } },
+        { upsert: true },
+      );
     } catch (error) {
       Logger.error('Failed to update data', error);
       throw error;

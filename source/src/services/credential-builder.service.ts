@@ -25,6 +25,78 @@ export interface IssuerInfo {
 
 @Injectable()
 export class CredentialBuilderService {
+  private ensureStringId(id: any, fieldName: string): string {
+    if (typeof id === 'string') {
+      return id;
+    }
+
+    Logger.warn(`Converting non-string ${fieldName} to string`, {
+      originalValue: id,
+      originalType: typeof id,
+    });
+
+    return String(id);
+  }
+
+  private sanitizeCredentialSubject(
+    credentialSubject: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const sanitized = { ...credentialSubject };
+
+    // Check for any nested @id or id fields that might not be strings
+    Object.keys(sanitized).forEach((key) => {
+      if (key === '@id' || key === 'id') {
+        sanitized[key] = this.ensureStringId(
+          sanitized[key],
+          `credentialSubject.${key}`,
+        );
+      } else if (
+        typeof sanitized[key] === 'object' &&
+        sanitized[key] !== null
+      ) {
+        // Recursively check nested objects
+        const nestedObj = sanitized[key] as Record<string, unknown>;
+        if (nestedObj['@id']) {
+          nestedObj['@id'] = this.ensureStringId(
+            nestedObj['@id'],
+            `credentialSubject.${key}.@id`,
+          );
+        }
+        if (nestedObj['id']) {
+          nestedObj['id'] = this.ensureStringId(
+            nestedObj['id'],
+            `credentialSubject.${key}.id`,
+          );
+        }
+      }
+    });
+    return sanitized;
+  }
+
+  private logCredentialDataForDebugging(
+    invitationId: string,
+    holderId: string,
+    credentialSubject: Record<string, unknown>,
+  ): void {
+    Logger.debug('Building credential data', {
+      invitationId: {
+        value: invitationId,
+        type: typeof invitationId,
+      },
+      holderId: {
+        value: holderId,
+        type: typeof holderId,
+      },
+      credentialSubject: {
+        keys: Object.keys(credentialSubject),
+        hasIdField: 'id' in credentialSubject,
+        hasAtIdField: '@id' in credentialSubject,
+        idFieldType: typeof credentialSubject.id,
+        atIdFieldType: typeof credentialSubject['@id'],
+      },
+    });
+  }
+
   buildCredentialData(
     invitationId: string,
     holderId: string,
@@ -33,6 +105,13 @@ export class CredentialBuilderService {
     options: CredentialDisplayOptions,
     styles?: CredentialStyles,
   ) {
+    // Log credential data for debugging JSON-LD issues
+    this.logCredentialDataForDebugging(
+      invitationId,
+      holderId,
+      credentialSubject,
+    );
+
     const expirationDate = new Date();
     expirationDate.setDate(
       expirationDate.getDate() + (options.expirationDays || 7),
@@ -41,21 +120,25 @@ export class CredentialBuilderService {
     return {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/security/bbs/v1',
-        { '@vocab': 'https://www.w3.org/ns/credentials/examples#' },
+        {
+          '@vocab': 'https://www.w3.org/ns/credentials/examples#',
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+          identifier: 'http://schema.org/identifier',
+        },
       ],
       name: options.title,
-      id: `urn:uuid:${invitationId}`,
+      id: `urn:uuid:${this.ensureStringId(invitationId, 'credential.id')}`,
       type: ['VerifiableCredential', ...(options.type || [])],
       issuer: {
-        id: issuer.id,
+        id: this.ensureStringId(issuer.id, 'issuer.id'),
         name: issuer.name,
       },
       issuanceDate: new Date(),
       expirationDate,
       credentialSubject: {
-        id: holderId,
-        ...credentialSubject,
+        id: this.ensureStringId(holderId, 'credentialSubject.id'),
+        ...this.sanitizeCredentialSubject(credentialSubject),
       },
     };
   }

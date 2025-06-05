@@ -79,14 +79,13 @@ export const AgentProvider: FactoryProvider<Agent> = {
       let originalInvitationId =
         waciPresentationDataService.getInvitationIdFromThread(param.thid);
 
-      // If no thread mapping found, try to find any invitation ID with stored data
       if (!originalInvitationId) {
         originalInvitationId =
           waciPresentationDataService.findInvitationIdWithData();
       }
 
       const presentationEventData: VerifiablePresentationFinishedEventData = {
-        invitationId: originalInvitationId || param.thid, // Use mapped invitation ID or fallback to thid
+        invitationId: originalInvitationId || param.thid,
         verified: param.verified,
         verifiableCredentials:
           param.vcs?.map((vc) => ({
@@ -97,11 +96,9 @@ export const AgentProvider: FactoryProvider<Agent> = {
         messageId: param.messageId,
       };
 
-      Logger.debug('Presentation verified - ID mapping', {
+      Logger.debug('Presentation verified', {
         thid: param.thid,
-        originalInvitationId,
-        usingInvitationId: originalInvitationId || param.thid,
-        allStoredIds: waciPresentationDataService.getAllStoredInvitationIds(),
+        invitationId: param.thid,
       });
       try {
         await outgoingWebhookService.sendVerifiablePresentationFinishedWebhook(
@@ -124,13 +121,10 @@ export const AgentProvider: FactoryProvider<Agent> = {
           });
         }),
       );
-      // TODO: Map vcs data to webhook payload structure
-      // Assuming vcs.credentials[0].data is the VC and vcs.holderDID is available
-      // This mapping needs refinement based on the actual structure of vcs
       try {
         await outgoingWebhookService.sendCredentialIssuedWebhook(
-          vcs.credentials[0].data, // Placeholder, needs proper mapping
-          vcs.credentials[0].data.holder, // Accessing holder DID from the VC data
+          vcs.credentials[0].data,
+          vcs.credentials[0].data.holder,
         );
       } catch (error) {
         Logger.error('Error sending credential arrived webhook', error);
@@ -142,7 +136,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
         vcVerified: data.vcVerified,
         presentationVerified: data.presentationVerified,
         vcId: data.vc.id,
-        fullData: data, // Log the full data to see what's available
+        fullData: data,
       });
     });
 

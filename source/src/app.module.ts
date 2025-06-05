@@ -4,6 +4,7 @@ import {
   NestModule,
   forwardRef,
 } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './controllers/health.controller';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
@@ -16,13 +17,22 @@ import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
 import { WaciCredentialDataService } from './services/waci-credential-data.service';
 import { WaciPresentationDataService } from './services/waci-presentation-data.service';
+import { WaciPresentationMongoService } from './services/waci-presentation-mongo.service';
 import { INJECTION_TOKENS } from './constants/injection-tokens';
 import { CredentialBuilderService } from './services/credential-builder.service';
-import { CorrelationMiddleware } from './middleware/correlation.middleware'; // Import CorrelationMiddleware
+import { CorrelationMiddleware } from './middleware/correlation.middleware';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { WaciPresentation, WaciPresentationSchema } from './schemas/waci-presentation.schema';
 
 @Module({
-  imports: [AuthModule, forwardRef(() => WebhooksModule)],
+  imports: [
+    AuthModule,
+    forwardRef(() => WebhooksModule),
+    MongooseModule.forRoot(process.env.MONGO_URI || ''),
+    MongooseModule.forFeature([
+      { name: WaciPresentation.name, schema: WaciPresentationSchema },
+    ]),
+  ],
   controllers: [HealthController, AppController],
   providers: [
     {
@@ -43,9 +53,10 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     MessagingGateway,
     WaciCredentialDataService,
     WaciPresentationDataService,
+    WaciPresentationMongoService,
     CredentialBuilderService,
   ],
-  exports: [ConfigProvider], // Export ConfigProvider
+  exports: [ConfigProvider],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

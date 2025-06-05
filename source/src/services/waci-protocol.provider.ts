@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { WACIProtocol } from '@extrimian/agent';
-import { FileSystemStorage } from '../storage/filesystem-storage';
+import { MongoStorage } from '../storage/mongo-storage';
 import { CONFIG } from '../config';
 import { WaciCredentialDataService } from './waci-credential-data.service';
-import { WaciPresentationDataService } from './waci-presentation-data.service';
+import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
 import { Logger } from '../utils/logger';
 import { CredentialBuilderService } from './credential-builder.service';
 import { OutgoingWebhookService } from './outgoing-webhook.service'; // Import the new service
@@ -13,14 +13,12 @@ export const WACIProtocolProvider: Provider = {
   useFactory: (
     config: any,
     waciCredentialDataService: WaciCredentialDataService,
-    waciPresentationDataService: WaciPresentationDataService,
+    waciPresentationDataService: WaciPresentationMongoService,
     credentialBuilder: CredentialBuilderService,
     outgoingWebhookService: OutgoingWebhookService, // Inject the new service
   ) => {
     return new WACIProtocol({
-      storage: new FileSystemStorage({
-        filepath: './storage/waci-storage.json',
-      }),
+      storage: new MongoStorage('waci_storage'),
       issuer: {
         issueCredentials: async (
           waciInvitationId: string,
@@ -89,7 +87,7 @@ export const WACIProtocolProvider: Provider = {
             holderId,
           );
 
-          waciCredentialDataService.removeData(waciInvitationId);
+          // waciCredentialDataService.removeData(waciInvitationId);
 
           return credentialOffer;
         },
@@ -97,7 +95,7 @@ export const WACIProtocolProvider: Provider = {
       verifier: {
         presentationDefinition: async (invitationId: string) => {
           const storedPresentationData =
-            waciPresentationDataService.getData(invitationId);
+            await waciPresentationDataService.getData(invitationId);
 
           Logger.debug('Processing presentation definition', {
             invitationId,
@@ -116,7 +114,7 @@ export const WACIProtocolProvider: Provider = {
   inject: [
     CONFIG,
     WaciCredentialDataService,
-    WaciPresentationDataService,
+    WaciPresentationMongoService,
     CredentialBuilderService,
     OutgoingWebhookService, // Add the new service to the inject array
   ],

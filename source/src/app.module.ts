@@ -4,7 +4,6 @@ import {
   NestModule,
   forwardRef,
 } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './controllers/health.controller';
 import { MongoConfigModule } from './storage/mongo/mongo-config.module';
 import { AppController } from './controllers/app.controller';
@@ -23,19 +22,14 @@ import { INJECTION_TOKENS } from './constants/injection-tokens';
 import { CredentialBuilderService } from './services/credential-builder.service';
 import { CorrelationMiddleware } from './middleware/correlation.middleware';
 import { WebhooksModule } from './webhooks/webhooks.module';
-import {
-  WaciPresentation,
-  WaciPresentationSchema,
-} from './schemas/waci-presentation.schema';
+import { WaciPresentationModule } from './waci-presentation/waci-presentation.module';
 
 @Module({
   imports: [
     AuthModule,
     forwardRef(() => WebhooksModule),
     MongoConfigModule,
-    MongooseModule.forFeature([
-      { name: WaciPresentation.name, schema: WaciPresentationSchema },
-    ]),
+    WaciPresentationModule,
   ],
   controllers: [HealthController, AppController],
   providers: [
@@ -62,6 +56,7 @@ import {
   ],
   exports: [ConfigProvider],
 })
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CorrelationMiddleware).forRoutes('*');

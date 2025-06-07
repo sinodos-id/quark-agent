@@ -19,13 +19,13 @@ const config = {
   TOKEN_SECRET: process.env.TOKEN_SECRET,
   TEST_WEBHOOK_URL: process.env.TEST_WEBHOOK_URL,
   PROD_WEBHOOK_URL: process.env.PROD_WEBHOOK_URL,
+  NODE_ENV: process.env.NODE_ENV,
 };
 
 export const CONFIG = Symbol.for('CONFIG');
-export type Configuration = typeof config & {
-  TEST_WEBHOOK_URL?: string;
-  PROD_WEBHOOK_URL?: string;
-};
+
+export type Configuration = typeof config;
+
 export const ConfigProvider: ValueProvider<Configuration> = {
   provide: CONFIG,
   useValue: config,

@@ -20,17 +20,17 @@ export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
   inject: [
     INJECTION_TOKENS.AGENT_SECURE_STORAGE,
-    WACIProtocol,
     INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
     CONFIG,
+    WACIProtocol,
     OutgoingWebhookService,
     WaciPresentationDataService,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
-    waciProtocol: WACIProtocol,
     transport: WebsocketServerTransport,
     config: Configuration,
+    waciProtocol: WACIProtocol,
     outgoingWebhookService: OutgoingWebhookService,
     waciPresentationDataService: WaciPresentationDataService,
   ) => {

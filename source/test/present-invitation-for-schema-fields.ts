@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://message-manager-production.up.railway.app';
+// const API_URL = 'http://localhost:8000';
+const API_URL = 'https://message-manager-production.up.railway.app';
 
 async function testInvitation() {
   try {
@@ -18,15 +18,15 @@ async function testInvitation() {
           constraints: {
             fields: [
               {
-                path: ['$.credentialSubject.name'], // Request the 'name' field
+                path: ['$.credentialSubject.name'],
                 filter: {
-                  type: 'string', // Assuming 'name' is a string
+                  type: 'string',
                 },
               },
               {
-                path: ['$.credentialSubject.startup'], // Request the 'startup' field
+                path: ['$.credentialSubject.startup'],
                 filter: {
-                  type: 'string', // Assuming 'startup' is a string
+                  type: 'string',
                 },
               },
             ],

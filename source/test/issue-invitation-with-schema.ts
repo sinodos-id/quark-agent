@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://message-manager-production.up.railway.app';
+// const API_URL = 'http://localhost:8000';
+const API_URL = 'https://message-manager-production.up.railway.app';
 
 async function testInvitation() {
   try {
@@ -92,10 +92,18 @@ async function testInvitation() {
       },
     };
 
-    const issuanceResponse = await axios.post(`${API_URL}/message`, {
-      goalCode: 'streamlined-vc',
-      credentialData: credentialData, // Use the constructed credentialData
-    });
+    const issuanceResponse = await axios.post(
+      `${API_URL}/message`,
+      {
+        goalCode: 'streamlined-vc',
+        credentialData: credentialData,
+      },
+      {
+        headers: {
+          'x-api-key': 'a2Fpem9rdcWNIG5pIG9yZSB3YSBuYXJ1',
+        },
+      },
+    );
 
     // Get the original invitation data
     const invitationData = issuanceResponse.data;

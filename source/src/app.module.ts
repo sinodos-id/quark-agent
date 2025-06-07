@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './controllers/health.controller';
+import { MongoConfigModule } from './storage/mongo/mongo-config.module';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
 import { MessagingGateway } from './controllers/messaging.gateway';
@@ -31,7 +32,7 @@ import {
   imports: [
     AuthModule,
     forwardRef(() => WebhooksModule),
-    MongooseModule.forRoot(process.env.MONGO_URI || ''),
+    MongoConfigModule,
     MongooseModule.forFeature([
       { name: WaciPresentation.name, schema: WaciPresentationSchema },
     ]),

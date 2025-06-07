@@ -8,7 +8,9 @@ import {
   Inject,
   Post,
   InternalServerErrorException,
+  UseGuards,
 } from '@nestjs/common';
+import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
 import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
@@ -33,6 +35,7 @@ export class AppController {
   ) {}
 
   @Post('message')
+  @UseGuards(ApiTokenAuthGuard)
   async createInvitation(
     @Body('goalCode') goalCode: GoalCode | OobGoalCode,
     @Body('credentialData') credentialData?: StoredCredentialData,
@@ -120,11 +123,13 @@ export class AppController {
   }
 
   @Get('issued-vcs')
+  @UseGuards(ApiTokenAuthGuard)
   async getIssuedVcs(): Promise<VerifiableCredentialWithInfo[]> {
     return this.agent.vc.getVerifiableCredentialsWithInfo();
   }
 
   @Post('send-invitation')
+  @UseGuards(ApiTokenAuthGuard)
   sendInvitation(@Body() body: any): void {
     Logger.debug('Sending invitation message', {
       to: body.to,

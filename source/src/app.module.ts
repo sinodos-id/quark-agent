@@ -9,8 +9,8 @@ import { MongoConfigModule } from './storage/mongo/mongo-config.module';
 import { AppController } from './controllers/app.controller';
 import { VerifiableCredentialService } from '@extrimian/vc-core';
 import { MessagingGateway } from './controllers/messaging.gateway';
-import { ConfigProvider } from './config';
 import { WebsocketServerTransport } from '@extrimian/agent';
+import { ConfigModule } from './config/config.module';
 import { MongoStorage } from './storage/mongo-storage';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
@@ -27,7 +27,9 @@ import { WaciPresentationModule } from './waci-presentation/waci-presentation.mo
 @Module({
   imports: [
     AuthModule,
-    forwardRef(() => WebhooksModule),
+    // forwardRef(() => WebhooksModule),
+    WebhooksModule,
+    ConfigModule,
     MongoConfigModule,
     WaciPresentationModule,
   ],
@@ -46,7 +48,6 @@ import { WaciPresentationModule } from './waci-presentation/waci-presentation.mo
       useFactory: () => new MongoStorage('secure_storage'),
     },
     WACIProtocolProvider,
-    ConfigProvider,
     AgentProvider,
     MessagingGateway,
     WaciCredentialDataService,
@@ -54,9 +55,8 @@ import { WaciPresentationModule } from './waci-presentation/waci-presentation.mo
     WaciPresentationMongoService,
     CredentialBuilderService,
   ],
-  exports: [ConfigProvider],
+  exports: [],
 })
-
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CorrelationMiddleware).forRoutes('*');

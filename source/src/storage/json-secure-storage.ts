@@ -5,7 +5,7 @@ import * as path from 'path';
 import { Logger } from '../utils/logger';
 
 @Injectable()
-export class JsonStorage implements AgentSecureStorage {
+export class JsonSecureStorage implements AgentSecureStorage {
   private storagePath: string;
   private storageData: Map<string, any>;
 

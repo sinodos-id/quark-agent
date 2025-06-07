@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { IAgentStorage } from '@extrimian/agent';
 
-export class FileSystemStorage implements IAgentStorage {
+export class JsonAgentStorage implements IAgentStorage {
   public readonly filepath: string;
 
   constructor(params: { filepath: string }) {

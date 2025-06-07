@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CONFIG, Configuration } from '../../config';
+import { ConfigModule } from '../../config/config.module';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
+      imports: [ConfigModule], // Import ConfigModule here
       inject: [CONFIG],
       useFactory: (config: Configuration) => {
         return {

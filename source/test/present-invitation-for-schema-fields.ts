@@ -38,7 +38,7 @@ async function testInvitation() {
       },
       {
         headers: {
-          'x-api-key': 'a2Fpem9rdcWNIG5pIG9yZSB3YSBuYXJ1',
+          'x-api-key': process.env.TOKEN_SECRET,
         },
       },
     );

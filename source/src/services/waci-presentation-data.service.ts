@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InputDescriptor } from '@extrimian/waci'; // Import InputDescriptor directly from @extrimian/waci
+import { InputDescriptor } from '@extrimian/waci';
 
 @Injectable()
 export class WaciPresentationDataService {
@@ -16,7 +16,6 @@ export class WaciPresentationDataService {
 
   removeData(invitationId: string): void {
     this.presentationDataMap.delete(invitationId);
-    // Also remove from thread mapping
     for (const [
       thid,
       storedInvitationId,

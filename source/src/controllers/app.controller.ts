@@ -5,12 +5,12 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Post,
   InternalServerErrorException,
+  UseGuards,
 } from '@nestjs/common';
+import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
-import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
 import {
   WaciCredentialDataService,
@@ -27,12 +27,12 @@ enum OobGoalCode {
 export class AppController {
   constructor(
     private agent: Agent,
-    @Inject(CONFIG) private config: Configuration,
     private waciCredentialDataService: WaciCredentialDataService,
     private waciPresentationService: WaciPresentationMongoService,
   ) {}
 
   @Post('message')
+  @UseGuards(ApiTokenAuthGuard)
   async createInvitation(
     @Body('goalCode') goalCode: GoalCode | OobGoalCode,
     @Body('credentialData') credentialData?: StoredCredentialData,
@@ -76,7 +76,6 @@ export class AppController {
       );
       invitationDecoded = JSON.parse(decodedString);
 
-      // Store credential data if provided for issuance flow
       if (
         flow === CredentialFlow.Issuance &&
         credentialData &&
@@ -88,7 +87,6 @@ export class AppController {
         );
       }
 
-      // Store presentation data if provided for presentation flow
       if (
         flow === CredentialFlow.Presentation &&
         presentationData &&
@@ -120,11 +118,13 @@ export class AppController {
   }
 
   @Get('issued-vcs')
+  @UseGuards(ApiTokenAuthGuard)
   async getIssuedVcs(): Promise<VerifiableCredentialWithInfo[]> {
     return this.agent.vc.getVerifiableCredentialsWithInfo();
   }
 
   @Post('send-invitation')
+  @UseGuards(ApiTokenAuthGuard)
   sendInvitation(@Body() body: any): void {
     Logger.debug('Sending invitation message', {
       to: body.to,

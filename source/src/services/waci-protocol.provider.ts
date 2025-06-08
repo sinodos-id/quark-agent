@@ -1,12 +1,12 @@
 import { Provider } from '@nestjs/common';
 import { WACIProtocol } from '@extrimian/agent';
-import { MongoStorage } from '../storage/mongo-storage';
 import { CONFIG } from '../config';
 import { WaciCredentialDataService } from './waci-credential-data.service';
 import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
 import { Logger } from '../utils/logger';
 import { CredentialBuilderService } from './credential-builder.service';
-import { OutgoingWebhookService } from './outgoing-webhook.service'; // Import the new service
+import { OutgoingWebhookService } from './outgoing-webhook.service';
+import { INJECTION_TOKENS } from '../constants/injection-tokens';
 
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
@@ -15,10 +15,11 @@ export const WACIProtocolProvider: Provider = {
     waciCredentialDataService: WaciCredentialDataService,
     waciPresentationDataService: WaciPresentationMongoService,
     credentialBuilder: CredentialBuilderService,
-    outgoingWebhookService: OutgoingWebhookService, // Inject the new service
+    outgoingWebhookService: OutgoingWebhookService,
+    waciProtocolStorage: any, // TODO:  Use type
   ) => {
     return new WACIProtocol({
-      storage: new MongoStorage('vc_storage'),
+      storage: waciProtocolStorage,
       issuer: {
         issueCredentials: async (
           waciInvitationId: string,
@@ -38,7 +39,7 @@ export const WACIProtocolProvider: Provider = {
               invitationId: waciInvitationId,
               holderId,
             });
-            throw new Error(errorMessage);
+            throw new Error(errorMessage); // TODO: Manage Gracefully
           }
 
           const {
@@ -80,13 +81,12 @@ export const WACIProtocolProvider: Provider = {
             holderId,
           });
 
-          // Send the outgoing webhook for credential issued
-          // Pass the actual VC data and the holder's DID
           await outgoingWebhookService.sendCredentialIssuedWebhook(
-            credentialData, // Use the built credentialData
+            credentialData,
             holderId,
           );
 
+          // TODO: Credentials invites can be one time or re-usable.
           // waciCredentialDataService.removeData(waciInvitationId);
 
           return credentialOffer;
@@ -116,6 +116,7 @@ export const WACIProtocolProvider: Provider = {
     WaciCredentialDataService,
     WaciPresentationMongoService,
     CredentialBuilderService,
-    OutgoingWebhookService, // Add the new service to the inject array
+    OutgoingWebhookService,
+    INJECTION_TOKENS.WACI_PROTOCOL_STORAGE,
   ],
 };

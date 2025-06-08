@@ -14,6 +14,7 @@ async function bootstrap() {
 
   await app.listen(config.PORT);
   Logger.log(`Running on port ${config.PORT}`);
+  Logger.log(config);
 
   const agent = app.get(Agent);
 

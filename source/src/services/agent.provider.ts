@@ -1,6 +1,5 @@
 import { FactoryProvider } from '@nestjs/common';
 import { CONFIG, Configuration } from '../config';
-import { MongoStorage } from '../storage/mongo-storage';
 import {
   Agent,
   AgentSecureStorage,
@@ -9,6 +8,7 @@ import {
   WACIProtocol,
   WebsocketServerTransport,
   WebsocketClientTransport,
+  IAgentStorage,
 } from '@extrimian/agent';
 import { INJECTION_TOKENS } from '../constants/injection-tokens';
 import { Logger } from '../utils/logger';
@@ -20,27 +20,31 @@ export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
   inject: [
     INJECTION_TOKENS.AGENT_SECURE_STORAGE,
-    WACIProtocol,
-    INJECTION_TOKENS.WEBSOCKET_TRANSPORT,
+    INJECTION_TOKENS.AGENT_STORAGE,
+    INJECTION_TOKENS.VC_STORAGE,
     CONFIG,
+    WebsocketServerTransport,
+    WACIProtocol,
     OutgoingWebhookService,
     WaciPresentationDataService,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
-    waciProtocol: WACIProtocol,
-    transport: WebsocketServerTransport,
+    agentStorage: IAgentStorage,
+    vcStorage: IAgentStorage,
     config: Configuration,
+    transport: WebsocketServerTransport,
+    waciProtocol: WACIProtocol,
     outgoingWebhookService: OutgoingWebhookService,
     waciPresentationDataService: WaciPresentationDataService,
   ) => {
     const agent = new Agent({
       didDocumentRegistry: new AgentModenaUniversalRegistry(config.MODENA_URL),
       didDocumentResolver: new AgentModenaUniversalResolver(config.MODENA_URL),
-      vcProtocols: [waciProtocol],
       supportedTransports: [new WebsocketClientTransport()],
-      agentStorage: new MongoStorage('agent_storage'),
-      vcStorage: new MongoStorage('vc_storage'),
+      vcProtocols: [waciProtocol],
+      agentStorage,
+      vcStorage,
       secureStorage,
     });
 

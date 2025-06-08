@@ -4,17 +4,14 @@ import {
   OnGatewayInit,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { Inject } from '@nestjs/common';
 import { Agent, WebsocketServerTransport } from '@extrimian/agent';
 import { Logger } from '../utils/logger';
-import { INJECTION_TOKENS } from '../constants/injection-tokens';
 
 @WebSocketGateway({ cors: true })
 export class MessagingGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    @Inject(INJECTION_TOKENS.WEBSOCKET_TRANSPORT)
     private transport: WebsocketServerTransport,
     private agent: Agent,
   ) {}

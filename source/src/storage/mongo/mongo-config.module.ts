@@ -6,7 +6,7 @@ import { ConfigModule } from '../../config/config.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], // Import ConfigModule here
+      imports: [ConfigModule],
       inject: [CONFIG],
       useFactory: (config: Configuration) => {
         return {

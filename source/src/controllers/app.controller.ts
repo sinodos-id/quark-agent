@@ -5,14 +5,12 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Post,
   InternalServerErrorException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
-import { CONFIG, Configuration } from '../config';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
 import {
   WaciCredentialDataService,
@@ -29,7 +27,6 @@ enum OobGoalCode {
 export class AppController {
   constructor(
     private agent: Agent,
-    @Inject(CONFIG) private config: Configuration,
     private waciCredentialDataService: WaciCredentialDataService,
     private waciPresentationService: WaciPresentationMongoService,
   ) {}
@@ -79,7 +76,6 @@ export class AppController {
       );
       invitationDecoded = JSON.parse(decodedString);
 
-      // Store credential data if provided for issuance flow
       if (
         flow === CredentialFlow.Issuance &&
         credentialData &&
@@ -91,7 +87,6 @@ export class AppController {
         );
       }
 
-      // Store presentation data if provided for presentation flow
       if (
         flow === CredentialFlow.Presentation &&
         presentationData &&

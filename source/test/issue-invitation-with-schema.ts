@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-// const API_URL = 'http://localhost:8000';
-const API_URL = 'https://message-manager-production.up.railway.app';
+const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://message-manager-production.up.railway.app';
 
 async function testInvitation() {
   try {
@@ -70,14 +70,13 @@ async function testInvitation() {
         thumbnail: {
           uri: 'https://example.com/mock_thumb.png',
           alt: 'Mock Thumb',
-        }, // Mock thumbnail
-        hero: { uri: credentialSchema.heroImage, alt: 'Hero' }, // Use schema heroImage
+        },
+        hero: { uri: credentialSchema.heroImage, alt: 'Hero' },
         text: { color: credentialSchema.displayOptions.textColor },
       },
       issuer: {
-        name: 'Mock Issuer Name', // Use mock issuer name
+        name: 'Mock Issuer Name',
         styles: {
-          // Mock issuer styles
           thumbnail: {
             uri: 'https://example.com/mock_issuer_thumb.png',
             alt: 'Mock Issuer Thumb',
@@ -105,18 +104,15 @@ async function testInvitation() {
       },
     );
 
-    // Get the original invitation data
     const invitationData = issuanceResponse.data;
 
-    // Convert the invitation data to a string and then base64 encode it
     const invitationString = JSON.stringify(invitationData);
     const base64Invitation = Buffer.from(invitationString)
       .toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
-      .replace(/=/g, ''); // URL-safe base64 encoding
+      .replace(/=/g, '');
 
-    // Format the response in the expected format
     const formattedResponse = {
       invitationId: invitationData.id,
       oobContentData: `didcomm://?_oob=${base64Invitation}`,

@@ -20,6 +20,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "issue-schema": "ts-node script/issue-invitation.ts",
+    "present-schema": "ts-node script/present-invitation.ts",
     "clean": "find . \\( -name 'node_modules' -o -name 'dist' -o -name 'lib' \\) -type d -prune -exec rm -rf '{}' +"
   },
   "dependencies": {
@@ -99,3 +101,4 @@
     "testEnvironment": "node"
   }
 }
+

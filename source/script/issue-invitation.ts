@@ -1,10 +1,15 @@
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://message-manager-production.up.railway.app';
+const isProduction =
+  process.argv.includes('--production') || process.argv.includes('-p');
+
+const API_URL = isProduction
+  ? 'https://message-manager-production.up.railway.app'
+  : 'http://localhost:8000';
 
 async function testInvitation() {
+  console.log(`Using API URL: ${API_URL}`);
   try {
     console.log('\n=== Testing Issuance Flow with Schema ===');
 

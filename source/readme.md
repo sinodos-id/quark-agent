@@ -4,7 +4,7 @@ This project is an SSI (Self-Sovereign Identity) API designed to streamline the 
 
 ## Overview 📖
 
-The Autopen Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets).
+The Autopen Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets, such as the **Quark ID wallet client**).
 
 ## How it Works 🛠️
 
@@ -13,7 +13,7 @@ The core flow for both issuance and presentation requests is as follows:
 1.  **Request Initiation:** An external system or user initiates an issuance or presentation request by calling the API's `/message` endpoint, providing the desired `goalCode` (Issuance or Presentation) and relevant data (credential details for issuance, presentation requirements for presentation).
 2.  **OOB Invitation Creation:** The API uses the underlying agent library to create an OOB invitation message based on the request.
 3.  **QR Code Generation:** The API response includes the OOB invitation data, which can be encoded into a QR code by the calling application (as demonstrated in the provided example scripts).
-4.  **Client Interaction:** An agent client (e.g., a mobile wallet application) scans the QR code containing the OOB invitation.
+4.  **Client Interaction:** An agent client (e.g., a mobile wallet application, such as the **Quark ID wallet client**) scans the QR code containing the OOB invitation.
 5.  **DID Resolution:** The agent client processes the invitation, which typically includes information needed to resolve the issuer's or verifier's Decentralized Identifier (DID). The DID Document contains service endpoints, including the `WEBSOCKET_ENDPOINT_URL`.
 6.  **DIDComm Interaction:** The agent client and the API (acting on behalf of the agent) establish a DIDComm connection using the resolved service endpoints. This connection is used to exchange messages for the credential issuance or presentation protocol.
 
@@ -25,7 +25,7 @@ To set up and run the project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository_url> # Replace with the actual repository URL
+    git clone <repository_url>
     cd autopen-message-manager
     ```
 2.  **Install dependencies:** The project uses pnpm as a package manager.
@@ -36,13 +36,29 @@ To set up and run the project locally:
     ```bash
     cp .env.example .env
     ```
-    Edit the `.env` file to set necessary variables, such as `TOKEN_SECRET` for API authentication. When `NODE_ENV` is set to `development`, the project uses local JSON file storage, and, `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID` are not required, production run will need you to set up a `MONGO_URI`. These variables are needed for production deployments using MongoDB and Vault.
-    
+    Edit the `.env` file to set necessary variables, such as `TOKEN_SECRET` for API authentication and `TEST_WEBHOOK_URL`/`PROD_WEBHOOK_URL` for webhooks. When `NODE_ENV` is set to `development`, the project uses local JSON file storage, and `MONGO_URI`, `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID` are not required. These variables are needed for production deployments using MongoDB and Vault.
 4.  **Run the application:**
     ```bash
     pnpm start:dev
     ```
     This will start the application in development mode, using local JSON files for storage.
+
+## Prerequisites ✅
+
+Before running this project, ensure you have the following installed:
+
+*   Node.js (v18 or higher recommended)
+*   pnpm (Package Manager)
+*   MongoDB (if running in production mode)
+*   ngrok (or a similar tunneling tool for local testing with websockets)
+
+## API Authentication 🔑
+
+The API endpoints are protected using an API key. You need to set the `TOKEN_SECRET` environment variable in your `.env` file. This secret is used to authenticate requests to endpoints like `/message`, `/issued-vcs`, and `/send-invitation`.
+
+## Webhooks 🎣
+
+The application supports outgoing webhooks to notify external systems about events, such as when a verifiable credential is issued or a presentation is verified. Configure the webhook endpoints by setting the `TEST_WEBHOOK_URL` and `PROD_WEBHOOK_URL` environment variables in your `.env` file.
 
 ## Storage 🗄️
 
@@ -54,6 +70,10 @@ The project uses different storage mechanisms based on the environment:
 ## Security Note 🔒
 
 **Important:** In this example project setup, the agent's cryptographic keys are stored using the configured storage mechanism (local JSON files in development, MongoDB in production, or Vault for secure storage) and are **not encrypted at rest** by default in the JSON/MongoDB storage options. For production deployments handling sensitive data, it is highly recommended to implement robust key management and encryption solutions. Using a dedicated key management service like HashiCorp Vault (configured via `VaultStorage`) provides a more secure option for key storage.
+
+## License 📄
+
+This project is licensed under the MIT License.
 
 ## Example Usage 📝
 

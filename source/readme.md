@@ -1,70 +1,60 @@
-# Backend Agent
+# Autopen Message Manager ✨
 
-A NestJS-based backend agent for handling verifiable credentials and secure messaging.
+This project is an SSI (Self-Sovereign Identity) API designed to streamline the operations of a Decentralized Identity agent, specifically focusing on Verifiable Credential issuance and presentation flows using DIDComm.
 
-## Features
+## Overview 📖
 
-- 🔐 Secure credential issuance and verification
-- 📨 WebSocket-based messaging
-- 🔒 Vault integration for secure storage
-- 📝 Structured logging system
-- 🚀 Railway deployment ready
+The Autopen Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets).
 
-## Getting Started
+## How it Works 🛠️
 
-### Prerequisites
+The core flow for both issuance and presentation requests is as follows:
 
-- Node.js 18
-- pnpm / npm
+1.  **Request Initiation:** An external system or user initiates an issuance or presentation request by calling the API's `/message` endpoint, providing the desired `goalCode` (Issuance or Presentation) and relevant data (credential details for issuance, presentation requirements for presentation).
+2.  **OOB Invitation Creation:** The API uses the underlying agent library to create an OOB invitation message based on the request.
+3.  **QR Code Generation:** The API response includes the OOB invitation data, which can be encoded into a QR code by the calling application (as demonstrated in the provided example scripts).
+4.  **Client Interaction:** An agent client (e.g., a mobile wallet application) scans the QR code containing the OOB invitation.
+5.  **DID Resolution:** The agent client processes the invitation, which typically includes information needed to resolve the issuer's or verifier's Decentralized Identifier (DID). The DID Document contains service endpoints, including the `WEBSOCKET_ENDPOINT_URL`.
+6.  **DIDComm Interaction:** The agent client and the API (acting on behalf of the agent) establish a DIDComm connection using the resolved service endpoints. This connection is used to exchange messages for the credential issuance or presentation protocol.
 
-### Installation
+**Note on Testing Environment:** For local testing, the `WEBSOCKET_ENDPOINT_URL` in the DID Document often needs to point to a publicly accessible endpoint that tunnels traffic to your local development server. Tools like **ngrok** are commonly used for this purpose, creating a secure tunnel from a public URL to your `localhost`.
 
-```bash
-pnpm install
-```
+## Setup 🚀
 
-### Development
+To set up and run the project locally:
 
-```bash
-# Start in development mode
-pnpm start:dev
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository_url> # Replace with the actual repository URL
+    cd autopen-message-manager
+    ```
+2.  **Install dependencies:** The project uses pnpm as a package manager.
+    ```bash
+    pnpm install
+    ```
+3.  **Environment Configuration:** Copy the example environment file and update it with your configuration.
+    ```bash
+    cp .env.example .env
+    ```
+    Edit the `.env` file to set necessary variables, such as `TOKEN_SECRET` for API authentication. When `NODE_ENV` is set to `development`, the project uses local JSON file storage, and, `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID` are not required, production run will need you to set up a `MONGO_URI`. These variables are needed for production deployments using MongoDB and Vault.
+    
+4.  **Run the application:**
+    ```bash
+    pnpm start:dev
+    ```
+    This will start the application in development mode, using local JSON files for storage.
 
-# Start in debug mode
-pnpm start:debug
-```
+## Storage 🗄️
 
-### Production
+The project uses different storage mechanisms based on the environment:
 
-```bash
-# Build
-pnpm build
+*   **Development:** Local JSON files are used to store agent data, verifiable credentials, and protocol-specific information. These files are located in the `./storage` directory.
+*   **Production:** MongoDB is used for persistent storage of agent data, verifiable credentials, and protocol-specific information. The connection string is configured via the `MONGO_URI` environment variable. Secure storage for production can optionally use HashiCorp Vault, configured via `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID`.
 
-# Start production server
-pnpm start:prod
-```
+## Security Note 🔒
 
-## Configuration
+**Important:** In this example project setup, the agent's cryptographic keys are stored using the configured storage mechanism (local JSON files in development, MongoDB in production, or Vault for secure storage) and are **not encrypted at rest** by default in the JSON/MongoDB storage options. For production deployments handling sensitive data, it is highly recommended to implement robust key management and encryption solutions. Using a dedicated key management service like HashiCorp Vault (configured via `VaultStorage`) provides a more secure option for key storage.
 
-### Environment Variables
+## Example Usage 📝
 
-Create a `.env` file based on `.env.example`:
-
-```env
-PORT=3000
-WEBSOCKET_ENDPOINT_ID=MessagingWebSocket
-DID_METHOD=your-did-method
-WEBSOCKET_ENDPOINT_URL=your-websocket-url
-MODENA_URL=your-modena-url
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+Refer to the scripts in the `script/` directory (`issue-invitation.ts` and `present-invitation.ts`) for examples of how to interact with the API to initiate issuance and presentation flows.

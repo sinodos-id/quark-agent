@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
@@ -8,8 +9,9 @@ const API_URL = isProduction
   ? 'https://message-manager-production.up.railway.app'
   : 'http://localhost:8000';
 
+console.log(`Using API URL: ${API_URL}`);
+
 async function testInvitation() {
-  console.log(`Using API URL: ${API_URL}`);
   try {
     console.log('\n=== Testing Presentation Flow for Schema Fields ===');
     const issuanceResponse = await axios.post(
@@ -42,7 +44,7 @@ async function testInvitation() {
       },
       {
         headers: {
-          'x-api-key': 'a2Fpem9rdcWNIG5pIG9yZSB3YSBuYXJ1',
+          'x-api-key': process.env.TOKEN_SECRET,
         },
       },
     );

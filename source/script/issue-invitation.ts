@@ -55,7 +55,6 @@ async function testInvitation() {
       }
     });
 
-    // Construct credentialData based on the schema and mocked data
     const credentialData = {
       nameDid: 'Mock Issuer Name',
       credentialSubject: mockCredentialSubject,
@@ -143,5 +142,4 @@ async function testInvitation() {
   }
 }
 
-// Run the test
 testInvitation();

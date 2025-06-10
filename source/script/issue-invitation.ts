@@ -1,8 +1,15 @@
+import 'dotenv/config';
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://message-manager-production.up.railway.app';
+const isProduction =
+  process.argv.includes('--production') || process.argv.includes('-p');
+
+const API_URL = isProduction
+  ? 'https://message-manager-production.up.railway.app'
+  : 'http://localhost:8000';
+
+console.log(`Using API URL: ${API_URL}`);
 
 async function testInvitation() {
   try {
@@ -48,9 +55,7 @@ async function testInvitation() {
       }
     });
 
-    // Construct credentialData based on the schema and mocked data
     const credentialData = {
-      // issuerDid: 'did:quarkid:EiAio855zQwqHqcJOPx5NrM_sKWaqfZJ8Efs552cb9A7aQ',
       nameDid: 'Mock Issuer Name',
       credentialSubject: mockCredentialSubject,
       options: {
@@ -99,7 +104,7 @@ async function testInvitation() {
       },
       {
         headers: {
-          'x-api-key': 'a2Fpem9rdcWNIG5pIG9yZSB3YSBuYXJ1',
+          'x-api-key': process.env.TOKEN_SECRET,
         },
       },
     );
@@ -137,5 +142,4 @@ async function testInvitation() {
   }
 }
 
-// Run the test
 testInvitation();

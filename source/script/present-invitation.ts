@@ -1,22 +1,28 @@
+import 'dotenv/config';
 import axios from 'axios';
 import * as qrcode from 'qrcode-terminal';
 
-const API_URL = 'http://localhost:8000';
-// const API_URL = 'https://message-manager-production.up.railway.app';
+const isProduction =
+  process.argv.includes('--production') || process.argv.includes('-p');
+
+const API_URL = isProduction
+  ? 'https://message-manager-production.up.railway.app'
+  : 'http://localhost:8000';
+
+console.log(`Using API URL: ${API_URL}`);
 
 async function testInvitation() {
   try {
-    console.log('\n=== Testing Presentation Flow for Schema Fields ==='); // Updated log message
+    console.log('\n=== Testing Presentation Flow for Schema Fields ===');
     const issuanceResponse = await axios.post(
       `${API_URL}/message`,
       {
         goalCode: 'streamlined-vp',
         presentationData: [
-          // Data for schema fields
           {
-            id: 'schema-fields-verification', // Unique ID for this descriptor
-            name: 'Schema Fields Verification', // Descriptive name
-            purpose: 'To verify the name and startup fields from a credential.', // Purpose
+            id: 'schema-fields-verification',
+            name: 'Schema Fields Verification',
+            purpose: 'To verify the name and startup fields from a credential.',
             constraints: {
               fields: [
                 {
@@ -52,15 +58,14 @@ async function testInvitation() {
       .toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
-      .replace(/=/g, ''); // URL-safe base64 encoding
+      .replace(/=/g, '');
 
-    // Format the response in the expected format
     const formattedResponse = {
       invitationId: invitationData.id,
       oobContentData: `didcomm://?_oob=${base64Invitation}`,
     };
     console.log(
-      'Presentation Response:', // Updated log message
+      'Presentation Response:',
       JSON.stringify(formattedResponse, null, 2),
     );
 
@@ -78,5 +83,4 @@ async function testInvitation() {
   }
 }
 
-// Run the test
 testInvitation();

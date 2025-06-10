@@ -1,86 +1,80 @@
-# Description
+# Autopen Message Manager ✨
 
-This is a component that acts as a message orchestrator, managing the workflow within the SSI environment. 
-It is designed to work within the same network environment without additional security measures.
-It is also designed to interact with a microservice responsible for translating front-end requests to this Backend Agent and vice versa. We call this layer SSI-Integration, which in its presentation layer exposes a REST API with the main functions:
+This project is an SSI (Self-Sovereign Identity) API designed to streamline the operations of a Decentralized Identity agent, specifically focusing on Verifiable Credential issuance and presentation flows using DIDComm.
 
-1. Generation of QR invitations
-2. Generation of DeepLink invitations
-   
-## Technologies
+## Overview 📖
 
-The application uses the following technologies:
+The Autopen Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets, such as the **Quark ID wallet client**).
 
-* JavaScript
-* Node.js
-* Nest.js
-  
-## Architecture
-[Diagram](https://docs.quarkid.org/en/Arquitectura/)
+## How it Works 🛠️
 
-## Documentation
-[Link](https://docs.quarkid.org/en/Arquitectura/componentes/)
+The core flow for both issuance and presentation requests is as follows:
 
-## Local Environment Setup
+1.  **Request Initiation:** An external system or user initiates an issuance or presentation request by calling the API's `/message` endpoint, providing the desired `goalCode` (Issuance or Presentation) and relevant data (credential details for issuance, presentation requirements for presentation).
+2.  **OOB Invitation Creation:** The API uses the underlying agent library to create an OOB invitation message based on the request.
+3.  **QR Code Generation:** The API response includes the OOB invitation data, which can be encoded into a QR code by the calling application (as demonstrated in the provided example scripts).
+4.  **Client Interaction:** An agent client (e.g., a mobile wallet application, such as the **Quark ID wallet client**) scans the QR code containing the OOB invitation.
+5.  **DID Resolution:** The agent client processes the invitation, which typically includes information needed to resolve the issuer's or verifier's Decentralized Identifier (DID). The DID Document contains service endpoints, including the `WEBSOCKET_ENDPOINT_URL`.
+6.  **DIDComm Interaction:** The agent client and the API (acting on behalf of the agent) establish a DIDComm connection using the resolved service endpoints. This connection is used to exchange messages for the credential issuance or presentation protocol.
 
-Clone the repository
+**Note on Testing Environment:** For local testing, the `WEBSOCKET_ENDPOINT_URL` in the DID Document often needs to point to a publicly accessible endpoint that tunnels traffic to your local development server. Tools like **ngrok** are commonly used for this purpose, creating a secure tunnel from a public URL to your `localhost`.
 
-- Open the project with your selected editor
-- Open a terminal and execute:
+## Setup 🚀
 
-```bash
-- cd source
-- yarn
-- yarn build
-- yarn start
-```
+To set up and run the project locally:
 
-When installing dependencies with the "yarn" command, we may get an error with the "@mattrglobal/node-bbs-signatures" library, it's optional to ignore it.
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository_url>
+    cd autopen-message-manager
+    ```
+2.  **Install dependencies:** The project uses pnpm as a package manager.
+    ```bash
+    pnpm install
+    ```
+3.  **Environment Configuration:** Copy the example environment file and update it with your configuration.
+    ```bash
+    cp .env.example .env
+    ```
+    Edit the `.env` file to set necessary variables, such as `TOKEN_SECRET` for API authentication and `TEST_WEBHOOK_URL`/`PROD_WEBHOOK_URL` for webhooks. When `NODE_ENV` is set to `development`, the project uses local JSON file storage, and `MONGO_URI`, `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID` are not required. These variables are needed for production deployments using MongoDB and Vault.
+4.  **Run the application:**
+    ```bash
+    pnpm start:dev
+    ```
+    This will start the application in development mode, using local JSON files for storage.
 
-## Steps to install the component on a server
+## Prerequisites ✅
 
-1. Have an empty Linux server. 
-2. Install the component and its images, which can be found on [Docker](https://hub.docker.com/r/quarkid/message-manager)
+Before running this project, ensure you have the following installed:
 
-To install a component from Docker Hub on your server, follow these steps:
+*   Node.js (v18 or higher recommended)
+*   pnpm (Package Manager)
+*   MongoDB (if running in production mode)
+*   ngrok (or a similar tunneling tool for local testing with websockets)
 
-1. Connect to the server.
+## API Authentication 🔑
 
-2. Install Docker on the server:
-If you don't have Docker installed on your server yet, follow the instructions to install Docker for your operating system. You can find detailed guides in the official Docker documentation.
+The API endpoints are protected using an API key. You need to set the `TOKEN_SECRET` environment variable in your `.env` file. This secret is used to authenticate requests to endpoints like `/message`, `/issued-vcs`, and `/send-invitation`.
 
-3. Download Docker.
+## Webhooks 🎣
 
-4. [Generate vault](https://developer.hashicorp.com/vault/tutorials/auth-methods/approle#step-1-enable-approle-auth-method)
+The application supports outgoing webhooks to notify external systems about events, such as when a verifiable credential is issued or a presentation is verified. Configure the webhook endpoints by setting the `TEST_WEBHOOK_URL` and `PROD_WEBHOOK_URL` environment variables in your `.env` file.
 
-Policy:
-```
-path "secret/*" {
-  capabilities = [ "create", "read", "update", "list", "delete" ]
-}
-```
-5. Execute:
-```
-cd source
-```
-6. Execute:
-```
-docker compose up
-```
+## Storage 🗄️
 
-## Environment Variables
-## General
+The project uses different storage mechanisms based on the environment:
 
-N/A 
+*   **Development:** Local JSON files are used to store agent data, verifiable credentials, and protocol-specific information. These files are located in the `./storage` directory.
+*   **Production:** MongoDB is used for persistent storage of agent data, verifiable credentials, and protocol-specific information. The connection string is configured via the `MONGO_URI` environment variable. Secure storage for production can optionally use HashiCorp Vault, configured via `VAULT_URL`, `VAULT_ROLE_ID`, and `VAULT_SECRET_ID`.
 
-## Logs
+## Security Note 🔒
 
-N/A
+**Important:** In this example project setup, the agent's cryptographic keys are stored using the configured storage mechanism (local JSON files in development, MongoDB in production, or Vault for secure storage) and are **not encrypted at rest** by default in the JSON/MongoDB storage options. For production deployments handling sensitive data, it is highly recommended to implement robust key management and encryption solutions. Using a dedicated key management service like HashiCorp Vault (configured via `VaultStorage`) provides a more secure option for key storage.
 
-## Network Requirements
+## License 📄
 
-The application must have internet connectivity and connection to the DWN Client component.
+This project is licensed under the MIT License.
 
-## Access Route
+## Example Usage 📝
 
-N/A
+Refer to the scripts in the `script/` directory (`issue-invitation.ts` and `present-invitation.ts`) for examples of how to interact with the API to initiate issuance and presentation flows.

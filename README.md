@@ -1,10 +1,10 @@
-# Autopen Message Manager ✨
+# Generic Message Manager ✨
 
-This project is an SSI (Self-Sovereign Identity) API designed to streamline the operations of a Decentralized Identity agent, specifically focusing on Verifiable Credential issuance and presentation flows using DIDComm.
+This project is an SSI (Self-Sovereign Identity) API for QuarkID, designed to streamline the operations of a Decentralized Identity agent, specifically focusing on generic Verifiable Credential issuance and presentation flows using DIDComm.
 
 ## Overview 📖
 
-The Autopen Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets, such as the **Quark ID wallet client**).
+The Generic Message Manager acts as a backend service that interacts with an SSI agent library (@extrimian/agent) to handle DIDComm messages related to Verifiable Credentials. It exposes API endpoints to initiate credential issuance and presentation requests, generating Out-of-Band (OOB) invitations that can be shared with agent clients (e.g., mobile wallets, such as the **Quark ID wallet client**).
 
 ## How it Works 🛠️
 
@@ -25,8 +25,8 @@ To set up and run the project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository_url>
-    cd autopen-message-manager
+    git clone https://github.com/Lucero-Labs/message-manager
+    cd message-manager
     ```
 2.  **Install dependencies:** The project uses pnpm as a package manager.
     ```bash

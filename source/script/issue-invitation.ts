@@ -7,7 +7,7 @@ const isProduction =
 
 const API_URL = isProduction
   ? 'https://message-manager-production.up.railway.app'
-  : 'http://localhost:8000';
+  : 'http://localhost:3000';
 
 console.log(`Using API URL: ${API_URL}`);
 

@@ -13,9 +13,9 @@ import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
 import {
-  WaciCredentialDataService,
   StoredCredentialData,
-} from '../services/waci-credential-data.service';
+  WaciIssueCredentialDataMongoService,
+} from '../services/waci-issue-credential-data-mongo.service';
 import { WaciPresentationMongoService } from '../services/waci-presentation-mongo.service';
 
 enum OobGoalCode {
@@ -27,7 +27,7 @@ enum OobGoalCode {
 export class AppController {
   constructor(
     private agent: Agent,
-    private waciCredentialDataService: WaciCredentialDataService,
+    private waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
     private waciPresentationService: WaciPresentationMongoService,
   ) {}
 
@@ -81,7 +81,7 @@ export class AppController {
         credentialData &&
         invitationDecoded.id
       ) {
-        this.waciCredentialDataService.storeData(
+        await this.waciIssueCredentialDataService.storeData(
           invitationDecoded.id,
           credentialData,
         );

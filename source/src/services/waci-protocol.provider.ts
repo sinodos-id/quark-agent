@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { WACIProtocol } from '@extrimian/agent';
 import { CONFIG } from '../config';
-import { WaciCredentialDataService } from './waci-credential-data.service';
+import { WaciIssueCredentialDataMongoService } from './waci-issue-credential-data-mongo.service';
 import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
 import { Logger } from '../utils/logger';
 import { CredentialBuilderService } from './credential-builder.service';
@@ -12,7 +12,7 @@ export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
   useFactory: (
     config: any,
-    waciCredentialDataService: WaciCredentialDataService,
+    waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
     waciPresentationDataService: WaciPresentationMongoService,
     credentialBuilder: CredentialBuilderService,
     outgoingWebhookService: OutgoingWebhookService,
@@ -30,8 +30,9 @@ export const WACIProtocolProvider: Provider = {
             holderId,
           });
 
-          const storedData =
-            waciCredentialDataService.getData(waciInvitationId);
+          const storedData = await waciIssueCredentialDataService.getData(
+            waciInvitationId,
+          );
 
           if (!storedData) {
             const errorMessage = `❌ No credential data found for invitation ID: ${waciInvitationId}`;
@@ -113,7 +114,7 @@ export const WACIProtocolProvider: Provider = {
   },
   inject: [
     CONFIG,
-    WaciCredentialDataService,
+    WaciIssueCredentialDataMongoService,
     WaciPresentationMongoService,
     CredentialBuilderService,
     OutgoingWebhookService,

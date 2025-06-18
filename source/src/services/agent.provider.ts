@@ -71,7 +71,16 @@ export const AgentProvider: FactoryProvider<Agent> = {
     });
 
     agent.vc.presentationVerified.on(async (param) => {
-      Logger.debug('Presentation verified', { param });
+      Logger.debug('🔍 Type checking presentationVerified param', {
+        paramKeys: Object.keys(param),
+        hasInvitationId: 'invitationId' in param,
+        paramInvitationId: (param as any).invitationId, // Check if it exists
+        thid: param.thid,
+        verified: param.verified,
+        vcsCount: param.vcs?.length,
+        messageId: param.messageId,
+        fullParam: JSON.stringify(param, null, 2),
+      });
 
       const firstVc = param.vcs?.[0] as any;
       const holderDID =
@@ -80,16 +89,44 @@ export const AgentProvider: FactoryProvider<Agent> = {
         firstVc?.data?.holder ||
         'unknown';
 
+      Logger.debug('🔍 Attempting to get invitation ID from thread', {
+        thid: param.thid,
+        callingGetInvitationIdFromThread: true,
+      });
+
       let originalInvitationId =
         waciPresentationDataService.getInvitationIdFromThread(param.thid);
 
+      Logger.debug('🔍 Result from getInvitationIdFromThread', {
+        originalInvitationId,
+        isNull: originalInvitationId === null,
+        isUndefined: originalInvitationId === undefined,
+      });
+
       if (!originalInvitationId) {
+        Logger.debug('🔍 Attempting fallback findInvitationIdWithData');
+
         originalInvitationId =
           waciPresentationDataService.findInvitationIdWithData();
+
+        Logger.debug('🔍 Result from findInvitationIdWithData', {
+          fallbackInvitationId: originalInvitationId,
+          isNull: originalInvitationId === null,
+          isUndefined: originalInvitationId === undefined,
+        });
       }
 
+      const finalInvitationId = originalInvitationId || param.thid;
+
+      Logger.debug('🔍 Final invitation ID resolution', {
+        originalInvitationId,
+        finalInvitationId,
+        usingThidAsFallback: !originalInvitationId,
+        thid: param.thid,
+      });
+
       const presentationEventData: VerifiablePresentationFinishedEventData = {
-        invitationId: originalInvitationId || param.thid,
+        invitationId: finalInvitationId,
         verified: param.verified,
         verifiableCredentials:
           param.vcs?.map((vc) => ({
@@ -100,16 +137,20 @@ export const AgentProvider: FactoryProvider<Agent> = {
         messageId: param.messageId,
       };
 
-      Logger.debug('Presentation verified', {
+      Logger.log('✅ Presentation verified - sending webhook', {
         thid: param.thid,
-        invitationId: param.thid,
+        originalInvitationId,
+        finalInvitationId,
+        webhookPayload: presentationEventData,
       });
+
       try {
         await outgoingWebhookService.sendVerifiablePresentationFinishedWebhook(
           presentationEventData,
         );
+        Logger.log('✅ Webhook sent successfully');
       } catch (error) {
-        Logger.error('Error sending presentation verified webhook', error);
+        Logger.error('❌ Error sending presentation verified webhook', error);
       }
     });
 

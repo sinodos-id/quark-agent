@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@extrimian/agent':
-        specifier: 0.9.0-25
-        version: 0.9.0-25(@babel/core@7.26.10)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
+        specifier: 0.11.0-2
+        version: 0.11.0-2(@babel/core@7.26.10)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
       '@extrimian/kms-storage-vault':
         specifier: 1.6.1
         version: 1.6.1(@babel/core@7.26.10)(@extrimian/did-core@1.1.0)(@extrimian/vc-core@1.0.7)(@jest/types@28.1.3)(babel-jest@28.1.3(@babel/core@7.26.10))(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(typescript@4.9.5)
@@ -21,8 +21,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7
       '@extrimian/waci':
-        specifier: 1.0.9
-        version: 1.0.9
+        specifier: 3.4.0
+        version: 3.4.0
       '@nestjs/axios':
         specifier: ^3.1.3
         version: 3.1.3(@nestjs/common@10.4.18(reflect-metadata@0.1.14)(rxjs@7.8.2))(axios@1.8.4)(rxjs@7.8.2)
@@ -469,8 +469,8 @@ packages:
   '@ethersproject/wordlists@5.8.0':
     resolution: {integrity: sha512-2df9bbXicZws2Sb5S6ET493uJ0Z84Fjr3pC4tu/qlnZERibZCeUVuqdtt+7Tv9xxhUxHoIekIA7avrKUWHrezg==}
 
-  '@extrimian/agent@0.9.0-25':
-    resolution: {integrity: sha512-6KcrvPRnnm2/EQI5326Ea57cku3LLlayOtAg0dU3KJBNOZ+5ahSNDSNR7njHULw4jabZ7jcePWIIbu6uM0NuMA==}
+  '@extrimian/agent@0.11.0-2':
+    resolution: {integrity: sha512-/z+ZmDF4H3ureLX50iaoY6Rj0ekIdSUyfHdFVh++2hHosPDwhBmClqgpRbk4DdklO162ZtFwXBLX2p5T5k1/Ag==}
 
   '@extrimian/core@1.0.5':
     resolution: {integrity: sha512-m1oRgKfaGK1/8aKwOFyzN8yVcX+zEbw+7wQ4UcJqiibzNvyeIFRnibbz7Ofi+ZVnVyouvGZFCp2Ziw11vaUUvQ==}
@@ -486,6 +486,9 @@ packages:
 
   '@extrimian/did-resolver@1.4.4':
     resolution: {integrity: sha512-01olmpcQL4hA+tjhKULiXdH2OPdDnaaSo6UB1kUEeH3RIMCqDlVB8qKIgyiE/niljypSMyGN1lKttC704XGGvQ==}
+
+  '@extrimian/dwn-client-ami@1.0.1':
+    resolution: {integrity: sha512-0WktLOegUhnCON3XllTZylhYTsWnMKhpOOc6ZIBBU4Tci8Z3ZH07RGwdO+Llfbk0r5yeS01tXJMPfyQz+7xk1w==}
 
   '@extrimian/dwn-client@1.2.5':
     resolution: {integrity: sha512-30U3WsoUSkpUXRiHL8AjLwdDLfSv4Z/RlYsWhODpdkwtcQFUu9f+HMOiT2DNnZp2/c5TKrtJl2AmF5Jn5qfX4Q==}
@@ -555,11 +558,11 @@ packages:
   '@extrimian/vc-verifier@1.2.0-0':
     resolution: {integrity: sha512-2GQHks2SLFaIx4tSp5FzwW8auWblHiWd4ctt6MyiN361mYuSGmeLVtMamoLQlE4s1qAvFB935SaGBZRwJG6Cgw==}
 
-  '@extrimian/waci@1.0.9':
-    resolution: {integrity: sha512-X9kXNvzstxEcVB5mDru9YDxX5FUMR91vA8XMeOoQoknf5uUS+PbW6bygxLMglOkybimtoN2y+o+snP19UK8xFQ==}
+  '@extrimian/waci@3.3.0':
+    resolution: {integrity: sha512-Wo2lk/gQdmy7Jt7bB8INrbH3pdFvC+f9iEXHuSTrw1tIx73REBC/Lbgf/26LYSXqFw9FHQbU2lQpBuIO1Gna4g==}
 
-  '@extrimian/waci@3.0.0':
-    resolution: {integrity: sha512-TvZnMJ1sL3+fZkEH6DNHigqjXx2IRhPoi4cRveZFO7AH2Ql9TQhNidvCyCuR7OHCUOo9r7lYMoVm2mxm67aRsQ==}
+  '@extrimian/waci@3.4.0':
+    resolution: {integrity: sha512-rk+ZP1Bdou7e9rGBX55tntsnonOKmbb05OfmrRBFFc+Pfw/+SJn/8kL4OMbfpBngycAjwON4+kt8MU6J9SLINQ==}
 
   '@hearro/didcomm@0.6.0':
     resolution: {integrity: sha512-eX5eCpT/IqvHfAb7Ns5rrKmPQ6vSQEHTbBtRcGbZYvei61g90paerM/EUExkoW/y0fXw7zvaPdvV3vNAe9lOVw==}
@@ -1710,10 +1713,6 @@ packages:
 
   clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
-    engines: {node: '>=0.8'}
-
-  clone@2.1.2:
-    resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
 
   co@4.6.0:
@@ -3219,6 +3218,9 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
+  lru-cache@4.1.5:
+    resolution: {integrity: sha512-sWZlbEP2OsHNkXrMl5GYk/jKk70MBng6UU4YI/qGDYbgf6YbP4EvmqISbXCoJiRKs+1bSpFHVgQxvJ17F2li5g==}
+
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
@@ -3466,10 +3468,6 @@ packages:
 
   node-addon-api@5.1.0:
     resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
-
-  node-cache@5.1.2:
-    resolution: {integrity: sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==}
-    engines: {node: '>= 8.0.0'}
 
   node-emoji@1.11.0:
     resolution: {integrity: sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==}
@@ -3765,6 +3763,9 @@ packages:
 
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+
+  pseudomap@1.0.2:
+    resolution: {integrity: sha512-b/YwNhb8lk1Zz2+bXXpS/LK9OisiZZ1SNsSLxN1x2OXVEhW2Ckr/7mWE5vrC1ZTiJlD9g19jWszTmJsB+oEpFQ==}
 
   psl@1.15.0:
     resolution: {integrity: sha512-JZd3gMVBAVQkSs6HdNZo9Sdo0LNcQeMNP3CozBJb3JYC/QUYZTnKxP+f8oWRX4rHP5EurWxqAHTSwUCjlNKa1w==}
@@ -4735,6 +4736,9 @@ packages:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
 
+  yallist@2.1.2:
+    resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
+
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
 
@@ -4825,7 +4829,7 @@ snapshots:
       '@babel/traverse': 7.27.0
       '@babel/types': 7.27.0
       convert-source-map: 2.0.0
-      debug: 4.4.0
+      debug: 4.4.1
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -4978,7 +4982,7 @@ snapshots:
       '@babel/parser': 7.27.0
       '@babel/template': 7.27.0
       '@babel/types': 7.27.0
-      debug: 4.4.0
+      debug: 4.4.1
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -5293,18 +5297,19 @@ snapshots:
       '@ethersproject/properties': 5.8.0
       '@ethersproject/strings': 5.8.0
 
-  '@extrimian/agent@0.9.0-25(@babel/core@7.26.10)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)':
+  '@extrimian/agent@0.11.0-2(@babel/core@7.26.10)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)':
     dependencies:
       '@extrimian/did-core': 1.1.0
       '@extrimian/did-registry': 1.6.0(@babel/core@7.26.10)(@extrimian/vc-core@1.1.0-0)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
       '@extrimian/did-resolver': 1.4.4
       '@extrimian/dwn-client': 1.2.5
+      '@extrimian/dwn-client-ami': 1.0.1
       '@extrimian/kms-client': 1.4.0-2(@babel/core@7.26.10)(@extrimian/did-core@1.1.0)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(jest@28.1.3(@types/node@16.18.126)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5)))(json-stringify-deterministic@1.0.1)(tslib@2.8.1)(typescript@4.9.5)
       '@extrimian/kms-core': 1.4.0-2(@extrimian/did-core@1.1.0)(@extrimian/vc-core@1.1.0-0)
       '@extrimian/modena-sdk': 1.3.2(@babel/core@7.26.10)(@extrimian/did-core@1.1.0)(@extrimian/vc-core@1.1.0-0)(@jest/types@28.1.3)(@trust/keyto@1.0.1)(@types/node@16.18.126)(@types/webassembly-js-api@0.0.2)(babel-jest@28.1.3(@babel/core@7.26.10))(base64url@3.0.1)(bitcoin-ts@1.4.0)(json-stringify-deterministic@1.0.1)(ts-node@10.9.2(@types/node@16.18.126)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
       '@extrimian/vc-core': 1.1.0-0
       '@extrimian/vc-verifier': 1.2.0-0
-      '@extrimian/waci': 3.0.0
+      '@extrimian/waci': 3.3.0
       '@types/base-64': 1.0.2
       async-lock: 1.4.1
       axios: 1.8.4
@@ -5312,7 +5317,7 @@ snapshots:
       jsonpath: 1.1.1
       jsonschema: 1.5.0
       jwt-decode: 3.1.2
-      node-cache: 5.1.2
+      lru-cache: 4.1.5
       socket.io: 4.6.1
       socket.io-client: 4.6.1
     transitivePeerDependencies:
@@ -5394,6 +5399,18 @@ snapshots:
       '@extrimian/did-core': 1.1.0
       axios: 0.27.2
       reflect-metadata: 0.1.14
+    transitivePeerDependencies:
+      - debug
+
+  '@extrimian/dwn-client-ami@1.0.1':
+    dependencies:
+      '@ipld/dag-pb': 2.1.18
+      axios: 0.27.2
+      axios-retry: 3.9.1
+      base-64: 1.0.0
+      cids: 1.1.9
+      multiformats: 9.9.0
+      uuid: 8.3.2
     transitivePeerDependencies:
       - debug
 
@@ -5822,14 +5839,14 @@ snapshots:
       - supports-color
       - web-streams-polyfill
 
-  '@extrimian/waci@1.0.9':
+  '@extrimian/waci@3.3.0':
     dependencies:
       jsonpath: 1.1.1
       jsonschema: 1.5.0
       lodash: 4.17.21
       uuid: 8.3.2
 
-  '@extrimian/waci@3.0.0':
+  '@extrimian/waci@3.4.0':
     dependencies:
       jsonpath: 1.1.1
       jsonschema: 1.5.0
@@ -6734,7 +6751,7 @@ snapshots:
   '@veramo/core@4.3.0':
     dependencies:
       credential-status: 2.0.6
-      debug: 4.4.0
+      debug: 4.4.1
       did-jwt-vc: 3.2.15
       did-resolver: 4.1.0
       events: 3.3.0
@@ -6750,7 +6767,7 @@ snapshots:
       '@veramo/message-handler': 4.3.0
       '@veramo/utils': 4.3.0
       cross-fetch: 3.2.0
-      debug: 4.4.0
+      debug: 4.4.1
       did-jwt: 6.11.6
       did-resolver: 4.1.0
       uint8arrays: 3.1.1
@@ -6762,7 +6779,7 @@ snapshots:
   '@veramo/message-handler@4.3.0':
     dependencies:
       '@veramo/core': 4.3.0
-      debug: 4.4.0
+      debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
 
@@ -6774,7 +6791,7 @@ snapshots:
       '@veramo/core': 4.3.0
       blakejs: 1.2.1
       credential-status: 2.0.6
-      debug: 4.4.0
+      debug: 4.4.1
       did-jwt: 6.11.6
       did-jwt-vc: 3.2.15
       did-resolver: 4.1.0
@@ -7409,8 +7426,6 @@ snapshots:
       wrap-ansi: 7.0.0
 
   clone@1.0.4: {}
-
-  clone@2.1.2: {}
 
   co@4.6.0: {}
 
@@ -8775,7 +8790,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -9382,6 +9397,11 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
+  lru-cache@4.1.5:
+    dependencies:
+      pseudomap: 1.0.2
+      yallist: 2.1.2
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -9640,10 +9660,6 @@ snapshots:
   node-abort-controller@3.1.1: {}
 
   node-addon-api@5.1.0: {}
-
-  node-cache@5.1.2:
-    dependencies:
-      clone: 2.1.2
 
   node-emoji@1.11.0:
     dependencies:
@@ -9944,6 +9960,8 @@ snapshots:
       ipaddr.js: 1.9.1
 
   proxy-from-env@1.1.0: {}
+
+  pseudomap@1.0.2: {}
 
   psl@1.15.0:
     dependencies:
@@ -11061,6 +11079,8 @@ snapshots:
   xtend@4.0.2: {}
 
   y18n@5.0.8: {}
+
+  yallist@2.1.2: {}
 
   yallist@3.1.1: {}
 

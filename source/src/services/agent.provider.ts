@@ -86,6 +86,8 @@ export const AgentProvider: FactoryProvider<Agent> = {
         fullParam: JSON.stringify(param, null, 2),
       });
 
+      const originalInvitationId = (param as any).invitationId;
+
       const firstVc = param.vcs?.[0] as any;
       const holderDID =
         firstVc?.holder ||
@@ -98,26 +100,9 @@ export const AgentProvider: FactoryProvider<Agent> = {
         callingGetInvitationIdFromThread: true,
       });
 
-      let originalInvitationId =
-        waciPresentationDataService.getInvitationIdFromThread(param.thid);
-
-      Logger.debug('🔍 Result from getInvitationIdFromThread', {
-        originalInvitationId,
-        isNull: originalInvitationId === null,
-        isUndefined: originalInvitationId === undefined,
-      });
 
       if (!originalInvitationId) {
         Logger.debug('🔍 Attempting fallback findInvitationIdWithData');
-
-        originalInvitationId =
-          waciPresentationDataService.findInvitationIdWithData();
-
-        Logger.debug('🔍 Result from findInvitationIdWithData', {
-          fallbackInvitationId: originalInvitationId,
-          isNull: originalInvitationId === null,
-          isUndefined: originalInvitationId === undefined,
-        });
       }
 
       const finalInvitationId = originalInvitationId || param.thid;

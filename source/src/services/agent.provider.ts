@@ -39,10 +39,14 @@ export const AgentProvider: FactoryProvider<Agent> = {
     waciPresentationDataService: WaciPresentationDataService,
   ) => {
     const agent = new Agent({
-      didDocumentRegistry: new AgentModenaUniversalRegistry(config.MODENA_URL),
+      didDocumentRegistry: new AgentModenaUniversalRegistry(
+        config.MODENA_URL,
+        config.DID_METHOD,
+      ),
       didDocumentResolver: new AgentModenaUniversalResolver(config.MODENA_URL),
       supportedTransports: [new WebsocketClientTransport()],
       vcProtocols: [waciProtocol],
+      agentPlugins: [],
       agentStorage,
       vcStorage,
       secureStorage,

@@ -1,5 +1,5 @@
+import { InputDescriptor } from '@extrimian/agent';
 import { Injectable } from '@nestjs/common';
-import { InputDescriptor } from '@extrimian/waci';
 
 @Injectable()
 export class WaciPresentationDataService {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { InputDescriptor } from '@extrimian/waci';
 import { WaciPresentation } from '../schemas/waci-presentation.schema';
 import { Logger } from '../utils/logger';
+import { InputDescriptor } from '@extrimian/agent';
 
 @Injectable()
 export class WaciPresentationMongoService {

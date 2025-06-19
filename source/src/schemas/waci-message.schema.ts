@@ -1,4 +1,4 @@
-import { WACIMessage } from '@extrimian/waci';
+import { WACIMessage } from '@extrimian/agent';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ collection: 'waci-messages' })

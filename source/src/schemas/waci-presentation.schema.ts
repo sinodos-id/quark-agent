@@ -1,6 +1,6 @@
+import { InputDescriptor } from '@extrimian/agent';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { InputDescriptor } from '@extrimian/waci';
 
 @Schema({ timestamps: true })
 export class WaciPresentation extends Document {

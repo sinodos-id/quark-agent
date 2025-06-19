@@ -1,5 +1,4 @@
-import { Agent, CredentialFlow, DID } from '@extrimian/agent';
-import { GoalCode, InputDescriptor } from '@extrimian/waci';
+import { Agent, CredentialFlow, DID, InputDescriptor } from '@extrimian/agent';
 import {
   BadRequestException,
   Body,
@@ -21,6 +20,11 @@ import { WaciPresentationMongoService } from '../services/waci-presentation-mong
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
   SIGNUP = 'extrimian/did-authentication/signup',
+}
+
+enum GoalCode {
+  Issuance = 'streamlined-vc',
+  Presentation = 'streamlined-vp',
 }
 
 @Controller()

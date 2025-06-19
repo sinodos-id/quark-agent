@@ -21,7 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "issue-schema": "ts-node script/issue-invitation.ts",
     "present-schema": "ts-node script/present-invitation.ts",
-    "clean": "find . \\( -name 'node_modules' -o -name 'dist' -o -name 'lib' \\) -type d -prune -exec rm -rf '{}' +"
+    "clean": "find . \\( -name 'node_modules' -o -name 'dist' -o -name 'lib' \\) -type d -prune -exec rm -rf '{}' +",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@extrimian/agent": "0.11.0-2",
@@ -48,6 +49,7 @@
     "mongoose": "^7.8.6",
     "passport": "^0.6.0",
     "passport-headerapikey": "^1.2.2",
+    "patch-package": "^8.0.0",
     "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.1.14",
     "rimraf": "^3.0.2",
@@ -80,6 +82,9 @@
   "pnpm": {
     "overrides": {
       "did-core": "1.2.0"
+    },
+    "patchedDependencies": {
+      "@extrimian/agent": "patches/@extrimian__agent.patch"
     }
   },
   "jest": {

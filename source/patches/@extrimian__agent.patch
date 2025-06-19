@@ -1,0 +1,15 @@
+diff --git a/dist/vc/vc.js b/dist/vc/vc.js
+index a5759b608504ed71faef88c83315afa9d8124cb9..4c645ecbb7018241cf83f595a916b02f220ed1bb 100644
+--- a/dist/vc/vc.js
++++ b/dist/vc/vc.js
+@@ -70,7 +70,9 @@ class VC {
+                 messageId: data.messageId,
+                 thid: data.thid,
+                 vcs: data.vcs,
+-                verified: data.verified
++                verified: data.verified,
++                invitationId: data.invitationId,
++                rejectMsg: data.rejectMsg
+             }));
+             protocol.credentialIssued.on((data) => this.onCredentialIssued.trigger({
+                 to: data.toDID,

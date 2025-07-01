@@ -8,6 +8,7 @@ export interface CredentialDisplayOptions {
   description?: string;
   type: string[];
   expirationDays?: number;
+  expirationDate?: string;
 }
 
 export interface CredentialStyles {
@@ -112,11 +113,15 @@ export class CredentialBuilderService {
       credentialSubject,
     );
 
-    const expirationDate = new Date();
-    expirationDate.setDate(
-      expirationDate.getDate() + (options.expirationDays || 7),
-    );
-
+    let expirationDate: Date;
+    if (options.expirationDate) {
+      expirationDate = new Date(options.expirationDate);
+    } else {
+      expirationDate = new Date();
+      expirationDate.setDate(
+        expirationDate.getDate() + (options.expirationDays || 7),
+      );
+    }
     return {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',

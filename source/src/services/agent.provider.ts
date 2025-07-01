@@ -78,7 +78,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
       Logger.debug('🔍 Type checking presentationVerified param', {
         paramKeys: Object.keys(param),
         hasInvitationId: 'invitationId' in param,
-        paramInvitationId: (param as any).invitationId, // Check if it exists
+        paramInvitationId: (param as any).invitationId,
         thid: param.thid,
         verified: param.verified,
         vcsCount: param.vcs?.length,
@@ -99,7 +99,6 @@ export const AgentProvider: FactoryProvider<Agent> = {
         thid: param.thid,
         callingGetInvitationIdFromThread: true,
       });
-
 
       if (!originalInvitationId) {
         Logger.debug('🔍 Attempting fallback findInvitationIdWithData');

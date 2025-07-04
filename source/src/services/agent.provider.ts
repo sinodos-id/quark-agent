@@ -119,6 +119,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
         verifiableCredentials:
           param.vcs?.map((vc) => ({
             id: vc.id,
+            credentialSubject: vc?.credentialSubject,
           })) || [],
         holderDID,
         thid: param.thid,

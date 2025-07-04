@@ -74,7 +74,7 @@ export class Logger {
     // In production, check LOG_LEVEL for DEBUG
     if (process.env.NODE_ENV === 'production') {
       if (level === LogLevel.DEBUG) {
-        return process.env.LOG_LEVEL === 'debug';
+        return process.env.LOG_LEVEL === LogLevel.DEBUG;
       }
       // Always log INFO in production
       return true;

@@ -1,0 +1,33 @@
+diff --git a/dist/services/vc-verifier.service.js b/dist/services/vc-verifier.service.js
+index ad9e5863227504ea38e2f4e77ed9aeb4c01e8b74..7dc0ad9447f480b40c00292726a2387921349d73 100644
+--- a/dist/services/vc-verifier.service.js
++++ b/dist/services/vc-verifier.service.js
+@@ -109,7 +109,10 @@ var VCVerifierService = /** @class */ (function () {
+                     case 7:
+                         // check expiration date
+                         if (vcObj.expirationDate && new Date(vcObj.expirationDate) < new Date()) {
+-                            throw new error_code_1.VerifiableCredentialExpired();
++                            return [2 /*return*/, {
++                                result: false,
++                                error: new error_code_1.VerifiableCredentialExpired(),
++                            }];
+                         }
+                         verifierInstance = inject_verifier_decorator_1.verifiers.get(vcObj.proof.type);
+                         verifier = new verifierInstance();
+diff --git a/src/services/vc-verifier.service.ts b/src/services/vc-verifier.service.ts
+index 25cc142429247dbaed979d306f0c4a0fb993ba8f..89adeff32321e420e0d5f15f6351bbd904c24e50 100644
+--- a/src/services/vc-verifier.service.ts
++++ b/src/services/vc-verifier.service.ts
+@@ -98,8 +98,10 @@ export class VCVerifierService {
+     }
+     // check expiration date
+     if (vcObj.expirationDate && new Date(vcObj.expirationDate) < new Date()) {
+-      
+-      throw new VerifiableCredentialExpired();
++      return {
++        result: false,
++        error: new VerifiableCredentialExpired(),
++      };
+     }
+ 
+     const verifierInstance = verifiers.get(vcObj.proof.type);

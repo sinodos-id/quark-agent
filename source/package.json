@@ -84,7 +84,8 @@
       "did-core": "1.2.0"
     },
     "patchedDependencies": {
-      "@extrimian/agent": "patches/@extrimian__agent.patch"
+      "@extrimian/agent": "patches/@extrimian__agent.patch",
+      "@extrimian/vc-verifier@1.2.0-0": "patches/@extrimian__vc-verifier@1.2.0-0.patch"
     }
   },
   "jest": {

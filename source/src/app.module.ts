@@ -1,9 +1,4 @@
-import {
-  forwardRef,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HealthController } from './controllers/health.controller';
 import { MongoConfigModule } from './storage/mongo/mongo-config.module';
 import { AppController } from './controllers/app.controller';
@@ -18,6 +13,7 @@ import { WACIProtocolProvider } from './services/waci-protocol.provider';
 import { WaciIssueCredentialDataMongoService } from './services/waci-issue-credential-data-mongo.service';
 import { WaciPresentationDataService } from './services/waci-presentation-data.service';
 import { WaciPresentationMongoService } from './services/waci-presentation-mongo.service';
+import { InvitationProcessingService } from './services/invitation-processing.service';
 import {
   WaciIssueCredentialData,
   WaciIssueCredentialDataSchema,
@@ -53,6 +49,7 @@ import { WaciPresentationModule } from './waci-presentation/waci-presentation.mo
     WaciPresentationDataService,
     WaciPresentationMongoService,
     CredentialBuilderService,
+    InvitationProcessingService,
   ],
   exports: [],
 })

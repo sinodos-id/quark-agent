@@ -33,14 +33,17 @@ export class OutgoingWebhookService {
     await this.sendWebhook('verifiable-presentation-finished', eventData);
   }
 
-  private async sendWebhook<T>(eventType: string, eventData: T): Promise<void> {
-    Logger.log(`Attempting to send ${eventType} webhook`);
-    const webhookUrl = this.getWebhookUrl();
+  private async sendWebhook(
+    eventType: string,
+    eventData:
+      | VerifiablePresentationFinishedEventData
+      | CredentialIssuedEventData,
+  ): Promise<void> {
+    const webhookUrl = this.getWebhookUrl(eventData);
+
+    Logger.debug(`Attempting to send ${eventType} webhook: ${webhookUrl}`);
 
     if (!webhookUrl) {
-      Logger.warn(
-        `Outgoing webhook URL not configured for ${eventType} event.`,
-      );
       return;
     }
 
@@ -49,11 +52,9 @@ export class OutgoingWebhookService {
       eventData,
     };
 
-    const endpoint = `${webhookUrl}/api/admin/webhook`;
-
     try {
       await firstValueFrom(
-        this.httpService.put(endpoint, payload, {
+        this.httpService.put(webhookUrl, payload, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -68,24 +69,34 @@ export class OutgoingWebhookService {
         message: err.message,
         status: err.response?.status,
         data: err.response?.data,
-        url: endpoint,
+        url: webhookUrl,
         payload,
       });
     }
   }
 
-  private getWebhookUrl(): string | undefined {
+  private getWebhookUrl(
+    eventData:
+      | VerifiablePresentationFinishedEventData
+      | CredentialIssuedEventData,
+  ): string | undefined {
     const isProd = process.env.NODE_ENV === 'production';
-    const url = isProd
-      ? this.config.PROD_WEBHOOK_URL
-      : this.config.TEST_WEBHOOK_URL;
+    let webhookUrl: string;
 
-    if (!url) {
+    if ('webhookUrl' in eventData) {
+      webhookUrl = eventData?.webhookUrl;
+    } else {
+      webhookUrl = isProd
+        ? this.config.PROD_WEBHOOK_URL
+        : this.config.TEST_WEBHOOK_URL;
+    }
+
+    if (!webhookUrl) {
       Logger.warn(
         `${isProd ? 'Production' : 'Test'} webhook URL not configured`,
       );
     }
 
-    return url;
+    return webhookUrl;
   }
 }

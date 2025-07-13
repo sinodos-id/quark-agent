@@ -39,6 +39,8 @@ async function testInvitation() {
                 },
               ],
             },
+            webhookUrl:
+              'https://webhook.site/e6879298-ee76-4f69-b308-e0fb0694010d',
           },
         ],
       },

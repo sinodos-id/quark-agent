@@ -5,17 +5,13 @@ import {
   Controller,
   Get,
   Post,
-  InternalServerErrorException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import {
-  StoredCredentialData,
-  WaciIssueCredentialDataMongoService,
-} from '../services/waci-issue-credential-data-mongo.service';
-import { WaciPresentationMongoService } from '../services/waci-presentation-mongo.service';
+import { StoredCredentialData } from '../services/waci-issue-credential-data-mongo.service';
+import { InvitationProcessingService } from '../services/invitation-processing.service';
 
 enum OobGoalCode {
   LOGIN = 'extrimian/did-authentication/signin',
@@ -31,8 +27,7 @@ enum GoalCode {
 export class AppController {
   constructor(
     private agent: Agent,
-    private waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
-    private waciPresentationService: WaciPresentationMongoService,
+    private invitationProcessingService: InvitationProcessingService,
   ) {}
 
   @Post('message')
@@ -58,67 +53,20 @@ export class AppController {
         throw new BadRequestException('Unsupported goal code');
     }
 
-    const invitation = await this.agent.vc.createInvitationMessage({ flow });
-    const invitationSplit = invitation.split('?_oob=')[1];
-
-    if (!invitationSplit) {
-      Logger.error(
-        '❌ Invalid invitation format: missing _oob parameter',
-        null,
-        {
-          invitation: invitation.substring(0, 100) + '...',
-        },
-      );
-      throw new InternalServerErrorException('Invalid invitation format');
-    }
-
-    let invitationDecoded: any = {};
-
-    try {
-      const decodedString = Buffer.from(invitationSplit, 'base64').toString(
-        'utf-8',
-      );
-      invitationDecoded = JSON.parse(decodedString);
-
-      if (
-        flow === CredentialFlow.Issuance &&
-        credentialData &&
-        invitationDecoded.id
-      ) {
-        await this.waciIssueCredentialDataService.storeData(
-          invitationDecoded.id,
-          credentialData,
-        );
-      }
-
-      if (
-        flow === CredentialFlow.Presentation &&
-        presentationData &&
-        invitationDecoded.id
-      ) {
-        await this.waciPresentationService.storeData(
-          invitationDecoded.id,
-          presentationData,
-        );
-      }
-    } catch (error) {
-      Logger.error('❌ Failed to process invitation', error, {
-        goalCode,
+    const processedInvitation =
+      await this.invitationProcessingService.createAndProcessInvitation(
         flow,
-        hasCredentialData: !!credentialData,
-        hasPresentationData: !!presentationData,
-        base64Sample: invitationSplit?.substring(0, 50) + '...',
-      });
-      throw new InternalServerErrorException('Failed to process invitation');
-    }
+        credentialData,
+        presentationData,
+      );
 
     Logger.log('🎉 API: Invitation created successfully', {
-      invitationId: invitationDecoded.id,
+      invitationId: processedInvitation.invitationId,
       goalCode,
       presentationData,
     });
 
-    return { ...invitationDecoded, invitationId: invitationDecoded.id };
+    return processedInvitation;
   }
 
   @Get('issued-vcs')

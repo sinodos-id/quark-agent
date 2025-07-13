@@ -8,8 +8,6 @@ const config = {
     process.env.WEBSOCKET_ENDPOINT_ID || 'MessagingWebSocket',
   DID_METHOD: process.env.DID_METHOD,
   WEBSOCKET_ENDPOINT_URL: process.env.WEBSOCKET_ENDPOINT_URL,
-  SSI_INTEGRATION_API_URL: process.env.SSI_INTEGRATION_API_URL,
-  SSI_INTEGRATION_TOKEN: process.env.SSI_INTEGRATION_TOKEN,
   MONGO_URI: process.env.MONGO_URI,
   MODENA_URL: process.env.MODENA_URL,
   VAULT_URL: process.env.VAULT_URL,

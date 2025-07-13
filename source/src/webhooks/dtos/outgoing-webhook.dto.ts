@@ -2,7 +2,9 @@
 
 export interface OutgoingWebhookPayload {
   eventType: string;
-  eventData: any;
+  eventData:
+    | CredentialIssuedEventData
+    | VerifiablePresentationFinishedEventData;
 }
 
 export interface CredentialIssuedEventData {
@@ -18,4 +20,5 @@ export interface VerifiablePresentationFinishedEventData {
   }>;
   holderDID: string;
   [key: string]: any;
+  webhookUrl?: string;
 }

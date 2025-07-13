@@ -39,7 +39,7 @@ async function testInvitation() {
         textColor: '#000000',
         backgroundColor: '#ffffff',
       },
-      expirationDays: -1,
+      expirationDays: 10,
     };
 
     // Mock data based on the schema fields

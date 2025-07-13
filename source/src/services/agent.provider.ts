@@ -14,7 +14,7 @@ import { INJECTION_TOKENS } from '../constants/injection-tokens';
 import { Logger } from '../utils/logger';
 import { OutgoingWebhookService } from './outgoing-webhook.service';
 import { VerifiablePresentationFinishedEventData } from '../webhooks/dtos/outgoing-webhook.dto';
-import { WaciPresentationDataService } from './waci-presentation-data.service';
+import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
@@ -26,7 +26,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     WebsocketServerTransport,
     WACIProtocol,
     OutgoingWebhookService,
-    WaciPresentationDataService,
+    WaciPresentationMongoService,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
@@ -36,7 +36,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     transport: WebsocketServerTransport,
     waciProtocol: WACIProtocol,
     outgoingWebhookService: OutgoingWebhookService,
-    waciPresentationDataService: WaciPresentationDataService,
+    waciPresentationDataService: WaciPresentationMongoService,
   ) => {
     const agent = new Agent({
       didDocumentRegistry: new AgentModenaUniversalRegistry(
@@ -86,7 +86,11 @@ export const AgentProvider: FactoryProvider<Agent> = {
         fullParam: JSON.stringify(param, null, 2),
       });
 
-      const originalInvitationId = (param as any).invitationId;
+      const originalInvitationId = (param as any)?.invitationId;
+
+      if (!originalInvitationId) {
+        return;
+      }
 
       const firstVc = param.vcs?.[0] as any;
       const holderDID =
@@ -95,23 +99,10 @@ export const AgentProvider: FactoryProvider<Agent> = {
         firstVc?.data?.holder ||
         'unknown';
 
-      Logger.debug('🔍 Attempting to get invitation ID from thread', {
-        thid: param.thid,
-        callingGetInvitationIdFromThread: true,
-      });
-
-      if (!originalInvitationId) {
-        Logger.debug('🔍 Attempting fallback findInvitationIdWithData');
-      }
-
       const finalInvitationId = originalInvitationId || param.thid;
-
-      Logger.debug('🔍 Final invitation ID resolution', {
-        originalInvitationId,
+      const presentationData = await waciPresentationDataService.getData(
         finalInvitationId,
-        usingThidAsFallback: !originalInvitationId,
-        thid: param.thid,
-      });
+      );
 
       const presentationEventData: VerifiablePresentationFinishedEventData = {
         invitationId: finalInvitationId,
@@ -124,12 +115,15 @@ export const AgentProvider: FactoryProvider<Agent> = {
         holderDID,
         thid: param.thid,
         messageId: param.messageId,
+        webhookUrl:
+          presentationData && presentationData.length > 0
+            ? presentationData[presentationData.length - 1]?.webhookUrl
+            : undefined,
       };
 
       Logger.log('✅ Presentation verified - sending webhook', {
         thid: param.thid,
         originalInvitationId,
-        finalInvitationId,
         webhookPayload: presentationEventData,
       });
 
@@ -137,6 +131,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
         await outgoingWebhookService.sendVerifiablePresentationFinishedWebhook(
           presentationEventData,
         );
+
         Logger.log('✅ Webhook sent successfully');
       } catch (error) {
         Logger.error('❌ Error sending presentation verified webhook', error);

@@ -11,7 +11,7 @@ import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
 import { WaciIssueCredentialDataMongoService } from './services/waci-issue-credential-data-mongo.service';
-import { WaciPresentationDataService } from './services/waci-presentation-data.service';
+import { WaciPresentationDataService } from './services/waci-presentation-memory.service';
 import { WaciPresentationMongoService } from './services/waci-presentation-mongo.service';
 import { InvitationProcessingService } from './services/invitation-processing.service';
 import {

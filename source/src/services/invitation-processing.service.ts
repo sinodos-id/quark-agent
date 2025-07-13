@@ -3,9 +3,9 @@ import { Agent, CredentialFlow, InputDescriptor } from '@extrimian/agent';
 import { Logger } from '../utils/logger';
 import {
   StoredCredentialData,
-  WaciIssueCredentialDataMongoService,
-} from './waci-issue-credential-data-mongo.service';
-import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
+  IssuedCredentialMongoStorage,
+} from '../storage/waci-issue-credential-data-mongo.storage';
+import { CredentialPresentationMongoStorage } from '../storage/waci-presentation-mongo.storage';
 
 export interface ProcessedInvitation {
   invitationId: string;
@@ -16,8 +16,8 @@ export interface ProcessedInvitation {
 export class InvitationProcessingService {
   constructor(
     private agent: Agent,
-    private waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
-    private waciPresentationService: WaciPresentationMongoService,
+    private waciIssueCredentialDataService: IssuedCredentialMongoStorage,
+    private waciPresentationService: CredentialPresentationMongoStorage,
   ) {}
 
   async createAndProcessInvitation(

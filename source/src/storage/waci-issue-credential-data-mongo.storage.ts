@@ -22,7 +22,7 @@ interface StoredCredentialData {
 }
 
 @Injectable()
-export class WaciIssueCredentialDataMongoService {
+export class IssuedCredentialMongoStorage {
   constructor(
     @InjectModel(WaciIssueCredentialData.name)
     private waciIssueCredentialDataModel: Model<WaciIssueCredentialData>,

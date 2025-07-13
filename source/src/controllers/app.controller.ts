@@ -10,7 +10,7 @@ import {
 import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import { StoredCredentialData } from '../services/waci-issue-credential-data-mongo.service';
+import { StoredCredentialData } from '../storage/waci-issue-credential-data-mongo.storage';
 import { InvitationProcessingService } from '../services/invitation-processing.service';
 
 enum OobGoalCode {

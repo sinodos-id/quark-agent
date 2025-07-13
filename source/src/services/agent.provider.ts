@@ -117,7 +117,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
         messageId: param.messageId,
         webhookUrl:
           presentationData && presentationData.length > 0
-            ? presentationData[presentationData.length - 1]?.webhookUrl
+            ? (presentationData[presentationData.length - 1] as any)?.webhookUrl
             : undefined,
       };
 

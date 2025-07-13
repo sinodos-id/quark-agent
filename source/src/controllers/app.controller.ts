@@ -10,11 +10,7 @@ import {
 import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
 import { Logger } from '../utils/logger';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
-import {
-  StoredCredentialData,
-  WaciIssueCredentialDataMongoService,
-} from '../services/waci-issue-credential-data-mongo.service';
-import { WaciPresentationMongoService } from '../services/waci-presentation-mongo.service';
+import { StoredCredentialData } from '../services/waci-issue-credential-data-mongo.service';
 import { InvitationProcessingService } from '../services/invitation-processing.service';
 
 enum OobGoalCode {
@@ -31,8 +27,6 @@ enum GoalCode {
 export class AppController {
   constructor(
     private agent: Agent,
-    private waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
-    private waciPresentationService: WaciPresentationMongoService,
     private invitationProcessingService: InvitationProcessingService,
   ) {}
 

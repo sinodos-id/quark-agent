@@ -5,10 +5,35 @@ import { MongoStorage } from './mongo-storage';
 import { JsonFileStorage } from './json-file-storage';
 import { JsonVcStorage } from './json-vc-storage';
 import { ConfigModule } from '../config/config.module';
+import { IssuedCredentialMongoStorage } from './waci-issue-credential-data-mongo.storage';
+import { CredentialPresentationMongoStorage } from './waci-presentation-mongo.storage';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  WaciIssueCredentialData,
+  WaciIssueCredentialDataSchema,
+} from '../schemas/waci-issue-credential-data.schema';
+import {
+  WaciPresentation,
+  WaciPresentationSchema,
+} from '../schemas/waci-presentation.schema';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [
+    ConfigModule,
+    MongooseModule.forFeature([
+      {
+        name: WaciIssueCredentialData.name,
+        schema: WaciIssueCredentialDataSchema,
+      },
+      {
+        name: WaciPresentation.name,
+        schema: WaciPresentationSchema,
+      },
+    ]),
+  ],
   providers: [
+    IssuedCredentialMongoStorage,
+    CredentialPresentationMongoStorage,
     {
       provide: INJECTION_TOKENS.AGENT_SECURE_STORAGE,
       useFactory: (config: Configuration) => {
@@ -51,6 +76,9 @@ import { ConfigModule } from '../config/config.module';
     },
   ],
   exports: [
+    MongooseModule,
+    IssuedCredentialMongoStorage,
+    CredentialPresentationMongoStorage,
     INJECTION_TOKENS.AGENT_SECURE_STORAGE,
     INJECTION_TOKENS.AGENT_STORAGE,
     INJECTION_TOKENS.VC_STORAGE,

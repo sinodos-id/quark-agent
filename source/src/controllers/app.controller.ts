@@ -5,9 +5,13 @@ import {
   Controller,
   Get,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTokenAuthGuard } from '../auth/guard/apitoken-auth.guard';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 import { Logger } from '../utils/logger';
 import { VerifiableCredentialWithInfo } from '@extrimian/agent/dist/vc/protocols/waci-protocol';
 import { StoredCredentialData } from '../storage/waci-issue-credential-data-mongo.storage';
@@ -29,6 +33,12 @@ export class AppController {
     private agent: Agent,
     private invitationProcessingService: InvitationProcessingService,
   ) {}
+
+  @Get()
+  getApp(@Res() res: Response) {
+    const file = createReadStream(join(process.cwd(), 'public', 'index.html'));
+    file.pipe(res);
+  }
 
   @Post('message')
   @UseGuards(ApiTokenAuthGuard)

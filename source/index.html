@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee Shop Verifier</title>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Scan to get your discount!</h1>
+    <div
+      id="qr-code-container"
+      hx-post="/verifier/qr-code"
+      hx-trigger="load"
+      hx-swap="innerHTML"
+      hx-vals='{"presentationData": [{"id": "schema-fields-verification", "name": "Schema Fields Verification", "purpose": "To verify the name and startup fields from a credential.", "constraints": {"fields": [{"path": ["$.credentialSubject.name"], "filter": {"type": "string"}}, {"path": ["$.credentialSubject.startup"], "filter": {"type": "string"}}]}}]}'
+    >
+      <h2>Loading QR Code...</h2>
+    </div>
+  </body>
+</html>

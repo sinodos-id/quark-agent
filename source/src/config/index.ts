@@ -18,6 +18,10 @@ const config = {
   TEST_WEBHOOK_URL: process.env.TEST_WEBHOOK_URL,
   PROD_WEBHOOK_URL: process.env.PROD_WEBHOOK_URL,
   NODE_ENV: process.env.NODE_ENV,
+  APP_URL:
+    process.env.NODE_ENV === 'production'
+      ? 'https://message-manager-production.up.railway.app'
+      : 'http://localhost:3000',
 };
 
 export const CONFIG = Symbol.for('CONFIG');

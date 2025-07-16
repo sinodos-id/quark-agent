@@ -38,6 +38,7 @@ export const WACIProtocolProvider: Provider = {
               invitationId: waciInvitationId,
               holderId,
             });
+            return;
           }
 
           const {

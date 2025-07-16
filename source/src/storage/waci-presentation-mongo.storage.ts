@@ -6,7 +6,7 @@ import { Logger } from '../utils/logger';
 import { InputDescriptor } from '@extrimian/agent';
 
 @Injectable()
-export class WaciPresentationMongoService {
+export class CredentialPresentationMongoStorage {
   private threadToInvitationMap = new Map<string, string>();
 
   constructor(

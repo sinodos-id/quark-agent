@@ -14,7 +14,7 @@ import { INJECTION_TOKENS } from '../constants/injection-tokens';
 import { Logger } from '../utils/logger';
 import { OutgoingWebhookService } from './outgoing-webhook.service';
 import { VerifiablePresentationFinishedEventData } from '../webhooks/dtos/outgoing-webhook.dto';
-import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
+import { CredentialPresentationMongoStorage } from '../storage/waci-presentation-mongo.storage';
 
 export const AgentProvider: FactoryProvider<Agent> = {
   provide: Agent,
@@ -26,7 +26,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     WebsocketServerTransport,
     WACIProtocol,
     OutgoingWebhookService,
-    WaciPresentationMongoService,
+    CredentialPresentationMongoStorage,
   ],
   useFactory: async (
     secureStorage: AgentSecureStorage,
@@ -36,7 +36,7 @@ export const AgentProvider: FactoryProvider<Agent> = {
     transport: WebsocketServerTransport,
     waciProtocol: WACIProtocol,
     outgoingWebhookService: OutgoingWebhookService,
-    waciPresentationDataService: WaciPresentationMongoService,
+    waciPresentationDataService: CredentialPresentationMongoStorage,
   ) => {
     const agent = new Agent({
       didDocumentRegistry: new AgentModenaUniversalRegistry(

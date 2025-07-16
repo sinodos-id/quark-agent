@@ -1,8 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { WACIProtocol } from '@extrimian/agent';
-import { CONFIG } from '../config';
-import { WaciIssueCredentialDataMongoService } from './waci-issue-credential-data-mongo.service';
-import { WaciPresentationMongoService } from './waci-presentation-mongo.service';
+import { IssuedCredentialMongoStorage } from '../storage/waci-issue-credential-data-mongo.storage';
+import { CredentialPresentationMongoStorage } from '../storage/waci-presentation-mongo.storage';
 import { Logger } from '../utils/logger';
 import { CredentialBuilderService } from './credential-builder.service';
 import { OutgoingWebhookService } from './outgoing-webhook.service';
@@ -11,9 +10,8 @@ import { INJECTION_TOKENS } from '../constants/injection-tokens';
 export const WACIProtocolProvider: Provider = {
   provide: WACIProtocol,
   useFactory: (
-    config: any,
-    waciIssueCredentialDataService: WaciIssueCredentialDataMongoService,
-    waciPresentationDataService: WaciPresentationMongoService,
+    issuedCredentialService: IssuedCredentialMongoStorage,
+    credentialPresentationStorage: CredentialPresentationMongoStorage,
     credentialBuilder: CredentialBuilderService,
     outgoingWebhookService: OutgoingWebhookService,
     waciProtocolStorage: any, // TODO:  Use type
@@ -30,7 +28,7 @@ export const WACIProtocolProvider: Provider = {
             holderId,
           });
 
-          const storedData = await waciIssueCredentialDataService.getData(
+          const storedData = await issuedCredentialService.getData(
             waciInvitationId,
           );
 
@@ -40,6 +38,7 @@ export const WACIProtocolProvider: Provider = {
               invitationId: waciInvitationId,
               holderId,
             });
+            return;
           }
 
           const {
@@ -95,7 +94,7 @@ export const WACIProtocolProvider: Provider = {
       verifier: {
         presentationDefinition: async (invitationId: string) => {
           const storedPresentationData =
-            await waciPresentationDataService.getData(invitationId);
+            await credentialPresentationStorage.getData(invitationId);
 
           Logger.debug('Processing presentation definition', {
             invitationId,
@@ -112,9 +111,8 @@ export const WACIProtocolProvider: Provider = {
     });
   },
   inject: [
-    CONFIG,
-    WaciIssueCredentialDataMongoService,
-    WaciPresentationMongoService,
+    IssuedCredentialMongoStorage,
+    CredentialPresentationMongoStorage,
     CredentialBuilderService,
     OutgoingWebhookService,
     INJECTION_TOKENS.WACI_PROTOCOL_STORAGE,

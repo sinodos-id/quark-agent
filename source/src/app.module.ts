@@ -10,9 +10,9 @@ import { StorageModule } from './storage/storage.module';
 import { AgentProvider } from './services/agent.provider';
 import { AuthModule } from './auth/auth.module';
 import { WACIProtocolProvider } from './services/waci-protocol.provider';
-import { WaciIssueCredentialDataMongoService } from './services/waci-issue-credential-data-mongo.service';
+import { IssuedCredentialMongoStorage } from './storage/waci-issue-credential-data-mongo.storage';
 import { WaciPresentationDataService } from './services/waci-presentation-memory.service';
-import { WaciPresentationMongoService } from './services/waci-presentation-mongo.service';
+import { CredentialPresentationMongoStorage } from './storage/waci-presentation-mongo.storage';
 import { InvitationProcessingService } from './services/invitation-processing.service';
 import {
   WaciIssueCredentialData,
@@ -45,9 +45,9 @@ import { WaciPresentationModule } from './waci-presentation/waci-presentation.mo
     WACIProtocolProvider,
     AgentProvider,
     MessagingGateway,
-    WaciIssueCredentialDataMongoService,
+    IssuedCredentialMongoStorage,
     WaciPresentationDataService,
-    WaciPresentationMongoService,
+    CredentialPresentationMongoStorage,
     CredentialBuilderService,
     InvitationProcessingService,
   ],

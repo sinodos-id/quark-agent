@@ -1,10 +1,20 @@
-import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Param,
+  Post,
+  Res,
+  Sse,
+} from '@nestjs/common';
 import { InvitationProcessingService } from '../services/invitation-processing.service';
-import { CredentialFlow, InputDescriptor } from '@extrimian/agent';
+import { CredentialFlow } from '@extrimian/agent';
 import * as qrcode from 'qrcode';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { CONFIG, Configuration } from '../config';
+import { SseService } from './sse.service';
+import { Observable, fromEvent, map } from 'rxjs';
 
 class VerifyRequestDto {
   presentationData: string;
@@ -15,7 +25,16 @@ export class VerifierController {
   constructor(
     private invitationProcessingService: InvitationProcessingService,
     @Inject(CONFIG) private config: Configuration,
+    private sseService: SseService,
   ) {}
+
+  @Sse('events/:sessionId')
+  sse(@Param('sessionId') sessionId: string): Observable<any> {
+    console.log(`Client connected to SSE for session: ${sessionId}`);
+    return fromEvent(this.sseService['emitter'], sessionId).pipe(
+      map((data) => ({ data })),
+    );
+  }
 
   @Post('qr-code')
   async getQrCode(@Body() body: VerifyRequestDto, @Res() response: Response) {
@@ -23,6 +42,8 @@ export class VerifierController {
 
     const sessionId = uuidv4();
     const webhookUrl = `${this.config.APP_URL}/verifier/webhook/${sessionId}`;
+
+    console.log(`Generated webhook URL: ${webhookUrl}`);
 
     const presentationData = JSON.parse(body.presentationData);
     console.log(presentationData);
@@ -39,7 +60,14 @@ export class VerifierController {
 
     const qrCodeDataUrl = await qrcode.toDataURL(invitation.invitationUrl);
 
+    const htmlResponse = `
+      <div hx-ext="sse" sse-connect="/verifier/events/${sessionId}" sse-swap="message">
+        <img src="${qrCodeDataUrl}" />
+        <div id="sse-message-container"></div>
+      </div>
+    `;
+
     response.setHeader('Content-Type', 'text/html');
-    response.send(`<img src="${qrCodeDataUrl}" />`);
+    response.send(htmlResponse);
   }
 }

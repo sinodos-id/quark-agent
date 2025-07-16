@@ -21,7 +21,7 @@ const config = {
   APP_URL:
     process.env.NODE_ENV === 'production'
       ? 'https://message-manager-production.up.railway.app'
-      : 'http://localhost:3000',
+      : 'https://a44cd90c2531.ngrok-free.app',
 };
 
 export const CONFIG = Symbol.for('CONFIG');

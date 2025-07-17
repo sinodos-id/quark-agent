@@ -91,10 +91,6 @@ export class OutgoingWebhookService {
       webhookUrl = isProd
         ? this.config.PROD_WEBHOOK_URL
         : this.config.TEST_WEBHOOK_URL;
-
-      Logger.warn(
-        `${isProd ? 'Production' : 'Test'} webhook URL not configured`,
-      );
     }
 
     return webhookUrl;

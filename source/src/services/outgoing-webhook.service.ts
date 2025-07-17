@@ -85,13 +85,13 @@ export class OutgoingWebhookService {
 
     if ('webhookUrl' in eventData) {
       webhookUrl = eventData?.webhookUrl;
-    } else {
-      webhookUrl = isProd
-        ? this.config.PROD_WEBHOOK_URL
-        : this.config.TEST_WEBHOOK_URL;
     }
 
     if (!webhookUrl) {
+      webhookUrl = isProd
+        ? this.config.PROD_WEBHOOK_URL
+        : this.config.TEST_WEBHOOK_URL;
+
       Logger.warn(
         `${isProd ? 'Production' : 'Test'} webhook URL not configured`,
       );

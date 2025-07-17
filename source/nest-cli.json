@@ -5,8 +5,8 @@
   "compilerOptions": {
     "assets": [
       {
-        "include": "../public",
-        "outDir": ".",
+        "include": "../public/**/*",
+        "outDir": "dist/public",
         "watch": true
       }
     ]

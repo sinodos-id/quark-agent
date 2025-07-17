@@ -1,4 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { HealthController } from './controllers/health.controller';
 import { MongoConfigModule } from './storage/mongo/mongo-config.module';
 import { AppController } from './controllers/app.controller';
@@ -13,6 +15,11 @@ import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '',
+      renderPath: '*',
+    }),
     CoreModule,
     VerifierModule,
     AuthModule,

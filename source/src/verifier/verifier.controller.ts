@@ -32,7 +32,7 @@ export class VerifierController {
   sse(@Param('sessionId') sessionId: string): Observable<any> {
     console.log(`Client connected to SSE for session: ${sessionId}`);
     return fromEvent(this.sseService['emitter'], sessionId).pipe(
-      map((data) => ({ data })),
+      map((data) => ({ data })), // Re-wrap the data
     );
   }
 

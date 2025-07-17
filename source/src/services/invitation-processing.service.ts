@@ -9,6 +9,7 @@ import { CredentialPresentationMongoStorage } from '../storage/waci-presentation
 
 export interface ProcessedInvitation {
   invitationId: string;
+  invitationUrl: string;
   [key: string]: any;
 }
 
@@ -27,9 +28,9 @@ export class InvitationProcessingService {
   ): Promise<ProcessedInvitation> {
     Logger.log('🔄 Service: Creating invitation', { flow });
 
-    const invitation = await this.agent.vc.createInvitationMessage({ flow });
+    const invitationUrl = await this.agent.vc.createInvitationMessage({ flow });
     const processedInvitation = await this.processInvitation(
-      invitation,
+      invitationUrl,
       flow,
       credentialData,
       presentationData,
@@ -40,7 +41,12 @@ export class InvitationProcessingService {
       flow,
     });
 
-    return processedInvitation;
+    const result: ProcessedInvitation = {
+      ...processedInvitation,
+      invitationUrl,
+    };
+
+    return result;
   }
 
   private async processInvitation(

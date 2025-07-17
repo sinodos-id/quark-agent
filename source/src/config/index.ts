@@ -18,6 +18,10 @@ const config = {
   TEST_WEBHOOK_URL: process.env.TEST_WEBHOOK_URL,
   PROD_WEBHOOK_URL: process.env.PROD_WEBHOOK_URL,
   NODE_ENV: process.env.NODE_ENV,
+  APP_URL:
+    process.env.NODE_ENV === 'production'
+      ? 'https://message-manager-production.up.railway.app'
+      : 'https://a44cd90c2531.ngrok-free.app',
 };
 
 export const CONFIG = Symbol.for('CONFIG');

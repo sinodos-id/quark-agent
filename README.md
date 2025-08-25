@@ -42,12 +42,28 @@ To set up and run the project locally:
     pnpm start:dev
     ```
     This will start the application in development mode, using local JSON files for storage.
+5.  **Configure WebSocket endpoint:** Set up the `WEBSOCKET_ENDPOINT_URL` in your `.env` file for real-time communication.
+    **For development:**
+    If you need external access during development, create a tunnel:
+    ```bash
+    # Create a tunnel to your local WebSocket server
+    ngrok http 3001
+
+    # Then update your .env with the tunnel URL
+    WEBSOCKET_ENDPOINT_URL=wss://your-ngrok-url.ngrok.io/ws
+    ```
+
+    **For production:**
+    ```bash
+    # Set this to your deployed application's WebSocket endpoint
+    WEBSOCKET_ENDPOINT_URL=wss://your-domain.com/ws
+    ```
 
 ## Prerequisites ✅
 
 Before running this project, ensure you have the following installed:
 
-*   Node.js (v18 or higher recommended)
+*   Node.js (v18)
 *   pnpm (Package Manager)
 *   MongoDB (if running in production mode)
 *   ngrok (or a similar tunneling tool for local testing with websockets)

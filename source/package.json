@@ -38,6 +38,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^9.4.3",
     "@nestjs/platform-socket.io": "^9.4.3",
+    "@nestjs/serve-static": "^5.0.3",
     "@nestjs/websockets": "^9.4.3",
     "@quarkid/did-resolver": "1.0.0",
     "axios": "^1.8.4",
@@ -50,10 +51,12 @@
     "passport": "^0.6.0",
     "passport-headerapikey": "^1.2.2",
     "patch-package": "^8.0.0",
+    "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.1.14",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^9.2.0",
@@ -62,7 +65,9 @@
     "@types/jest": "28.1.8",
     "@types/luxon": "^3.6.2",
     "@types/node": "^16.18.126",
+    "@types/qrcode": "^1.5.5",
     "@types/supertest": "^2.0.16",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.57.1",
